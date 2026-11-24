@@ -18,7 +18,7 @@ Bu kararları mevcut React/Three.js prototipini ilerletmek için aldım. Donanı
 ## Uygulama ve doğrulama günlüğü
 
 - Aşama 1: kararlar ve veri sözleşmesi kaydedildi.
-- Aşama 2: backend, migration, örnek gönderici ve veritabanı testleri eklenecek.
+- Aşama 2 tamamlandı: FastAPI uçları, PostgreSQL migration, token korumalı yazma, idempotent kayıt ve harici örnek gönderici eklendi. PostgreSQL 16 üzerinde 17 backend testi geçti (doğrulama, kaynak/görev ayrımı, zaman normalizasyonu, tekrar gönderim, kalıcılık). Docker mevcut olmadığı için testler izole yerel PostgreSQL sunucusunda çalıştırıldı; Compose tarifi ayrıca sunuldu.
 - Aşama 3: frontend API çalışma alanı, uçtan uca doğrulama ve kurulum belgeleri eklenecek.
 
 Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme yazılacak. Fiziksel sensör doğruluğu ve saha performansı iddia edilmiyor.
