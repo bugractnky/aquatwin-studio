@@ -27,6 +27,7 @@ export default function Twin({
   theme,
   reducedMotion,
   cameraCommand,
+  monitoringOnly = false,
 }) {
   const host = useRef(),
     labels = useRef(),
@@ -50,6 +51,7 @@ export default function Twin({
     layer,
     theme,
     reducedMotion,
+    monitoringOnly,
   };
   useEffect(() => {
     const el = host.current;
@@ -318,6 +320,9 @@ export default function Twin({
         controls.target.set(0, s.view === "2d" ? 0 : -6, 0);
         controls.enableRotate = s.view !== "2d";
       }
+      route.visible = !s.monitoringOnly;
+      boat.visible = !s.monitoringOnly;
+      cable.visible = !s.monitoringOnly;
       const v = vesselPosition(s.mission);
       boat.position.set(
         v.x,
@@ -330,7 +335,8 @@ export default function Twin({
         boat.rotation.y = Math.atan2(next.x - st.x, next.z - st.z);
       }
       pod.position.set(v.x, -s.mission.depth * Z - 0.5, v.z);
-      pod.visible = s.view !== "2d" || s.mission.depth === 0;
+      pod.visible =
+        !s.monitoringOnly && (s.view !== "2d" || s.mission.depth === 0);
       cable.geometry.setFromPoints([
         new THREE.Vector3(v.x, 1, v.z),
         new THREE.Vector3(v.x, -s.mission.depth * Z, v.z),

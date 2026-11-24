@@ -7,3 +7,9 @@ dist/
 !.env.example
 src-before-hci-review/
 README-before-hci-review.md
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+test-results/
+playwright-report/

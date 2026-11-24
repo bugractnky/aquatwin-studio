@@ -26,7 +26,7 @@ Tasarımın merkezinde bir su üstü botu ve bot üzerindeki vinç bulunur. Bot 
 
 Arayüz bu süreci **canlı görev görünümü**, **3D gölet modeli**, **dikey profiller**, **mekânsal analiz** ve **incelenebilir ölçüm kayıtları** üzerinden birleştirir.
 
-> **Mevcut durum:** Uygulama tamamen sentetik veriyle çalışır. Fiziksel bot/vinç kontrolü, gerçek sensör bağlantısı ve backend entegrasyonu henüz bulunmaz. Görsellerdeki gölet geometrisi ve batimetri şematiktir.
+> **Mevcut durum:** İki çalışma alanı vardır: tarayıcı içi sentetik demo ve FastAPI/PostgreSQL üzerinden kalıcı ölçüm okuyan API alanı. Harici örnek göndericiyle backend → veritabanı → tablo/3D akışı uygulanmıştır. Fiziksel bot/vinç kontrolü ve gerçek sensör sürücüleri henüz yoktur. Gölet geometrisi ve batimetri şematiktir.
 
 <p align="center">
   <img src="docs/images/overview.jpg" alt="AquaTwin analiz ekranı: 3D gölet, Cividis ölçeği, dikey profil ve görev durumu" width="1100">
@@ -104,7 +104,9 @@ npm run dev
 
 Vite'ın terminalde gösterdiği yerel adresi açın. Varsayılan adres `http://127.0.0.1:5173` olur; port doluysa Vite başka bir port seçebilir.
 
-**API anahtarı, veritabanı veya `.env` dosyası gerekmez.** Prototip tarayıcı içinde çalışır.
+**Demo modu** için API anahtarı, veritabanı veya `.env` gerekmez. **API çalışma alanı** için [backend kurulumunu](backend/README.md) tamamlayın. Arayüzdeki **API çalışma alanı** düğmesi kalıcı görev ve ölçümleri açar; API kapalıyken demo verisine dönmez.
+
+Kararlar ve yapılan geliştirmeler: [DEVELOPMENT_DECISIONS.md](DEVELOPMENT_DECISIONS.md). Ölçüm sözleşmesi: [docs/MEASUREMENT_CONTRACT.md](docs/MEASUREMENT_CONTRACT.md).
 
 ### İlk deneme
 
@@ -140,6 +142,9 @@ Her kayıt ayrıca görev/istasyon kimliğini, zamanı, yerel konumu, örnek say
 
 ```text
 src/
+├── SourceApp.jsx           Demo/API çalışma alanı seçimi
+├── ApiWorkspace.jsx        Kalıcı görev ve ölçüm görünümü
+├── api.js                  API sözleşmesi ve görüntüleme adaptörü
 ├── App.jsx                 Çalışma alanları ve ortak arayüz durumu
 ├── Twin.jsx                Three.js sahnesi, bot/pod ve mekânsal katmanlar
 ├── components.jsx          Profil, kayıt tablosu ve ayrıntı pencereleri
@@ -171,11 +176,11 @@ Araştırma dayanakları ve tasarım kararları: **[RESEARCH.md](RESEARCH.md)**.
 | **Geçmiş replay** | Kayıtları sırasıyla açar; gerçek tarihsel bot rotasını yeniden oynatmaz. |
 | **DO dikkat eşiği** | Kullanıcı tarafından değiştirilen bir demo eşiğidir; çevresel tanı veya mevzuat limiti değildir. |
 
-Gerçek batimetri, GNSS, sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT/API/veritabanı bağlantısı ve GP/kriging bu sürümde uygulanmış değildir.
+Gerçek batimetri, GNSS koordinat dönüşümü, sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT ve GP/kriging bu sürümde uygulanmış değildir. API ve PostgreSQL bağlantısı uygulanmıştır. API alanı yalnız bilinen `demo-pond-v1` yerel koordinatlarını şematik sahneye koyar; coğrafi koordinatlı kayıtlar tabloda korunur. API alanında cihaz telemetrisi, bot hareketi ve interpolasyon katmanı henüz yoktur. Demo IDW özellikleri ayrı demo modunda korunur.
 
 ## Doğrulama
 
-Mevcut test paketi **8 kontrol** içerir:
+Frontend birim test paketi **12 kontrol** içerir; mevcut demo/model kontrollerine eksik parametre, koordinat referansı, API birim doğrulama ve görev ayrımı eklendi:
 
 - Açık ve koyu temada temel semantik metin renklerinin karşıtlığı.
 - Dip mesafesi, toplama öncesi hareket engeli ve doğru görev bitişi.
@@ -187,11 +192,25 @@ Mevcut test paketi **8 kontrol** içerir:
 
 Bu kontroller tam WCAG uygunluğu, saha güvenliği veya gerçek kullanıcı başarımı sertifikası değildir. Temsilî kullanıcı ve donanım testleri ilerleyen aşamalarda gereklidir.
 
+### Backend ve uçtan uca kontroller
+
+[API çalışma alanı ekranı](docs/images/api-workspace.png) · [Doğrulama kaydı](docs/VALIDATION_MEASUREMENT_API.md)
+
+PostgreSQL üzerinde 17 backend testi ve gerçek API/veritabanına bağlanan 2 Playwright tarayıcı senaryosu bulunur. Kurulum ve ayrı test veritabanı ayrıntıları [backend/README.md](backend/README.md) içinde. E2E testleri yalnız sentetik görev oluşturur; fiziksel cihaza komut göndermez.
+
+```bash
+# API ve Vite (5176) açıkken, token API ile aynı olmalı:
+AQUATWIN_INGEST_TOKEN=YOUR_LOCAL_TOKEN npm run test:e2e
+```
+
+İlk kullanımda `npx playwright install chromium` gerekir. Sistem Chrome kullanılacaksa `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` verilebilir. Tarayıcı testleri UUID'li sentetik görevler ekler; ayrı yerel test ortamında çalıştırın. API yazma token'ı Vite/React ortam değişkenlerine konulmaz.
+
 ## Sonraki aşamalar
 
 - [ ] Gerçek gölet kıyısı ve batimetri araştırmasını modele aktarmak.
 - [ ] Bot, vinç ve derinlik sensöründen canlı telemetri almak.
-- [ ] MQTT/HTTPS, sunucu API'si ve kalıcı veri tabanını bağlamak.
+- [x] HTTP ölçüm API'si ve kalıcı PostgreSQL veritabanını bağlamak.
+- [ ] Saha bağlantısı için HTTPS/MQTT ve çevrimdışı cihaz kuyruğunu değerlendirmek.
 - [ ] Gerçek kalibrasyon ve ham örnek kayıtlarını sisteme taşımak.
 - [ ] GP/kriging modellerini saha verisiyle karşılaştırmak.
 - [ ] Saha koşullarında okunabilirlik, erişilebilirlik ve görev kullanılabilirliğini değerlendirmek.

@@ -2381,3 +2381,28 @@ input[type="search"],
   width: 44px;
   min-width: 44px;
 }
+
+/* API workspace reuses the existing scene, records table, tokens and dialogs. */
+.api-workspace { max-width: 1450px; margin: auto; padding: 28px; display: grid; gap: 20px; }
+.api-heading { display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+.api-heading h1 { margin: 8px 0; }
+.api-workspace p { line-height: 1.6; }
+.api-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 16px; }
+.api-controls label { display: grid; gap: 8px; min-width: 180px; max-width: 100%; }
+.api-controls select { max-width: 100%; min-height: 44px; padding: 8px; }
+.api-summary, .api-empty { padding: 20px; }
+.api-summary code { overflow-wrap: anywhere; }
+.api-scene > p { padding: 0 18px; }
+.api-scene .scene-shell { position: relative; inset: auto; overflow: hidden; min-height: 460px; height: 500px; background: var(--surface-alt); }
+.api-json { max-height: 400px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.api-details dd { margin: 4px 0 16px; overflow-wrap: anywhere; }
+.api-details dt { font-weight: 650; }
+@media (max-width: 700px) {
+  .api-workspace { padding: 12px; }
+  .api-heading { flex-direction: column; align-items: start; }
+  .api-controls > label { min-width: 0; width: 100%; }
+  .api-scene .scene-shell { height: 400px; min-height: 400px; }
+}
+
+.api-colorbar { height: 14px; margin: 16px 18px 8px; border-radius: 4px; }
+.api-summary h2 { overflow-wrap: anywhere; }

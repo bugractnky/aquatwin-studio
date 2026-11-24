@@ -1,3 +1,4 @@
+import { formatReading, QUALITY_LABELS } from "./api.js";
 import React, { useEffect, useRef, useState } from "react";
 import {
   X,
@@ -42,7 +43,7 @@ export function Badge({ quality = "ok", children }) {
       ) : quality === "unstable" ? (
         <AlertTriangle size={15} />
       ) : null}
-      {children || (quality === "ok" ? "Geçerli" : "Kararsız")}
+      {children || QUALITY_LABELS[quality] || "İncelenmedi"}
     </span>
   );
 }
@@ -336,6 +337,8 @@ export function RecordsTable({
   selectedId,
   notify,
   missionName,
+  stationOptions = STATIONS,
+  depthOptions = [1, 2, 3],
 }) {
   const rows = filterRecords(records, filters),
     sortKey = filters.sort || "time",
@@ -404,7 +407,7 @@ export function RecordsTable({
             }
           >
             <option value="all">Tüm istasyonlar</option>
-            {STATIONS.map((s) => (
+            {stationOptions.map((s) => (
               <option key={s.id}>{s.id}</option>
             ))}
           </select>
@@ -416,7 +419,7 @@ export function RecordsTable({
             onChange={(e) => setFilters({ ...filters, depth: e.target.value })}
           >
             <option value="all">Tüm derinlikler</option>
-            {[1, 2, 3].map((d) => (
+            {depthOptions.map((d) => (
               <option key={d} value={d}>
                 {d} m
               </option>
@@ -434,6 +437,8 @@ export function RecordsTable({
             <option value="all">Tüm durumlar</option>
             <option value="ok">Geçerli</option>
             <option value="unstable">Kararsız</option>
+            <option value="unreviewed">İncelenmedi</option>
+            <option value="invalid">Geçersiz</option>
           </select>
         </label>
         <button className="btn subtle" onClick={() => setFilters({})}>
@@ -493,11 +498,11 @@ export function RecordsTable({
                   })}
                 </td>
                 <td>{r.depth.toFixed(1)} m</td>
-                <td>{r.temp.toFixed(1)} °C</td>
-                <td>{r.ph.toFixed(2)}</td>
-                <td>{r.do.toFixed(2)} mg/L</td>
-                <td>{r.ec} µS/cm</td>
-                <td>{r.turb.toFixed(1)} NTU</td>
+                <td>{formatReading(r.temp, 1, "°C")}</td>
+                <td>{formatReading(r.ph, 2)}</td>
+                <td>{formatReading(r.do, 2, "mg/L")}</td>
+                <td>{formatReading(r.ec, 0, "µS/cm")}</td>
+                <td>{formatReading(r.turb, 1, "NTU")}</td>
                 <td>
                   <Badge quality={r.quality} />
                 </td>

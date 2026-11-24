@@ -98,7 +98,7 @@ function useReducedMotion() {
     system,
   ];
 }
-export default function App() {
+export default function App({ onOpenApi }) {
   const live = useMission();
   const menuButton = useRef(null),
     sidebarRef = useRef(null);
@@ -382,6 +382,9 @@ export default function App() {
             </span>
           </div>
           <div className="header-actions">
+            <button className="btn" onClick={onOpenApi}>
+              API çalışma alanı
+            </button>
             <span className="demo-badge">SENTETİK VERİ</span>
             <button
               className="btn theme-btn"
