@@ -11,3 +11,5 @@ README-before-hci-review.md
 __pycache__/
 .pytest_cache/
 *.pyc
+test-results/
+playwright-report/

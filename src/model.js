@@ -220,7 +220,7 @@ export function accepted(records) {
   const map = new Map();
   records
     .filter((r) => r.quality === "ok")
-    .forEach((r) => map.set(`${r.station}|${r.depth}`, r));
+    .forEach((r) => map.set(`${r.mission}|${r.station}|${r.depth}`, r));
   return [...map.values()];
 }
 export function completedStations(records) {
@@ -382,6 +382,15 @@ export function csv(records) {
     "do_sd",
     "n",
     "reason",
+    "source",
+    "device_id",
+    "received_at",
+    "target_depth_m",
+    "reference_id",
+    "latitude",
+    "longitude",
+    "accuracy_m",
+    "calibration_id",
   ];
   const esc = (v) => '"' + String(v ?? "").replaceAll('"', '""') + '"';
   return (

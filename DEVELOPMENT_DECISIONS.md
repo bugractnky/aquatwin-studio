@@ -19,6 +19,17 @@ Bu kararları mevcut React/Three.js prototipini ilerletmek için aldım. Donanı
 
 - Aşama 1: kararlar ve veri sözleşmesi kaydedildi.
 - Aşama 2 tamamlandı: FastAPI uçları, PostgreSQL migration, token korumalı yazma, idempotent kayıt ve harici örnek gönderici eklendi. PostgreSQL 16 üzerinde 17 backend testi geçti (doğrulama, kaynak/görev ayrımı, zaman normalizasyonu, tekrar gönderim, kalıcılık). Docker mevcut olmadığı için testler izole yerel PostgreSQL sunucusunda çalıştırıldı; Compose tarifi ayrıca sunuldu.
-- Aşama 3: frontend API çalışma alanı, uçtan uca doğrulama ve kurulum belgeleri eklenecek.
+- Aşama 3 tamamlandı: ayrı API çalışma alanı, görev seçimi, 5 saniyelik iptal edilebilir sorgulama, eksik sensör gösterimi, kayıt ayrıntısı, CSV metaverisi ve mevcut Three.js sahnesinde ölçüm noktaları eklendi. Demo korunuyor; API alanında sahte hareket veya demo fallback yok. 12 frontend birim testi, 2 gerçek API/PostgreSQL tarayıcı senaryosu ve production build geçti. Masaüstü/mobil ekranlar görsel olarak kontrol edildi.
 
 Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme yazılacak. Fiziksel sensör doğruluğu ve saha performansı iddia edilmiyor.
+
+## Doğrulama ve kapsam
+
+- Gerçek PostgreSQL 16 ile kalıcılık, yeniden açılan API uygulaması, UTC normalizasyonu, birim/konum doğrulama, kaynak/görev ayrımı, aynı kimlikte aynı/farklı içerik davranışları test edildi.
+- Tarayıcıda harici gönderim → API → DB → ortak tablo ve 3D akışı doğrulandı. Kaydı açma, eksik parametre, sayfa yenileme, 503 hata uyarısı, toparlanma, boş görev listesi ve 390 px görünüm test edildi.
+- Mevcut IDW `accepted` anahtarı görev kimliğini de içerecek şekilde düzeltildi; farklı görevler aynı istasyon/derinlikte birbirini ezmiyor. API alanında interpolasyon henüz açılmadı.
+- PostGIS ilk aşamada eklenmedi: henüz gerçek gölet/GNSS dönüşümü yok. Ham GNSS konumu saklanıyor; şematik yerel referansla karıştırılmıyor.
+- Örnek gönderici deterministik fixture gönderir; tam bot/telemetri simülatörü değildir. Donanım adaptörleri, çevrimdışı cihaz kuyruğu, fiziksel komutlar ve kalibrasyon deneyleri sonraki aşamadır.
+- Bağımlılıklar kilitlendi. Build, mevcut Three.js parçası için 500 kB uyarısı veriyor; build başarısız değil. Backend testlerinde Starlette/httpx deprecation uyarısı bulunuyor; testler geçiyor.
+- Doğrulama PostgreSQL'i sistemdeki mevcut veritabanına dokunmadan ayrı geçici cluster üzerinde çalıştırıldı. Günlük kullanım için `backend/README.md` ile kalıcı PostgreSQL kurulmalıdır. Docker bulunmadığından Compose çalıştırılarak doğrulanmadı.
+- Kod bu aşamada geliştirme branch'ine gönderilir. Main'e merge veya internet yayını yapılmaz.
