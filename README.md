@@ -93,6 +93,10 @@ Her bağlantı gerçek arayüzün tam uzunluktaki ekran görüntüsünü açar.
 <img src="docs/images/analysis.jpg" alt="AquaTwin tam analiz ekranı" width="1100">
 </details>
 
+## Donanım öncesi yazılım akışı
+
+[Simülatör ve kalıcı kuyruk](docs/SIMULATOR.md) → [kalite/kalibrasyon incelemesi](docs/QUALITY.md) → [API IDW, profil ve görev karşılaştırması](docs/API_ANALYSIS.md). [Ekip kurulumu ve CI](docs/TEAM_SETUP.md), [gerçek doğrulama kaydı](docs/VALIDATION_PRE_HARDWARE.md). Gerçek sensör eşikleri, harita/batimetri ve fiziksel kontrol donanım/saha verisi bekler.
+
 ## Hızlı başlangıç
 
 ### Gereksinimler
@@ -196,7 +200,7 @@ Araştırma dayanakları ve tasarım kararları: **[RESEARCH.md](RESEARCH.md)**.
 | **Geçmiş replay** | Kayıtları sırasıyla açar; gerçek tarihsel bot rotasını yeniden oynatmaz. |
 | **DO dikkat eşiği** | Kullanıcı tarafından değiştirilen bir demo eşiğidir; çevresel tanı veya mevzuat limiti değildir. |
 
-Gerçek batimetri, GNSS koordinat dönüşümü, sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT ve GP/kriging bu sürümde uygulanmış değildir. API ve PostgreSQL bağlantısı uygulanmıştır. API alanı yalnız bilinen `demo-pond-v1` yerel koordinatlarını şematik sahneye koyar; coğrafi koordinatlı kayıtlar tabloda korunur. API alanında telemetri/olay paneli vardır; bot hareketi ve interpolasyon katmanı henüz yoktur. Demo IDW özellikleri ayrı demo modunda korunur.
+Gerçek batimetri, doğrulanmış GNSS dönüşümü, fiziksel sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT ve GP/kriging yoktur. Kalibrasyon kayıt/inceleme altyapısı vardır. API ve PostgreSQL bağlantısı uygulanmıştır. API alanı yalnız bilinen `demo-pond-v1` yerel koordinatlarını şematik sahneye koyar; coğrafi koordinatlı kayıtlar tabloda korunur. API alanında telemetri/olay paneli ve ayrı yerel koordinat IDW analizi vardır; bot hareketi yoktur. Demo IDW özellikleri ayrı demo modunda korunur.
 
 ## Doğrulama
 

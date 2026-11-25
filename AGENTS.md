@@ -21,9 +21,9 @@ These instructions cover the entire repository. The user's explicit current requ
 - React/Vite/Three.js demo plus FastAPI/PostgreSQL measurement API.
 - Separate API workspace reads persistent measurements and plots supported local points.
 - Hardware procurement is coordinated by the university/supervisors; delivery and exact specifications were unconfirmed at the last handoff. Update only from new evidence.
-- Telemetry/event ingestion and monitoring are implemented (M4); read `docs/TELEMETRY_CONTRACT.md`. Real hardware integration, motor commands, offline queue, GNSS transform and API interpolation remain absent.
+- Telemetry/event ingestion and monitoring are implemented (M4); read `docs/TELEMETRY_CONTRACT.md`. Simulated plan replay/offline outbox, revisioned quality/calibration and local-coordinate API IDW are implemented; read docs/SIMULATOR.md, docs/QUALITY.md and docs/API_ANALYSIS.md. Real hardware integration, motor commands and surveyed GNSS/bathymetry remain absent.
 - Persistent sampling plans and separate operator sessions are implemented (M3). Read `docs/MISSION_PLANNING.md` before planning/auth changes.
-- The user prioritized M3 over infrastructure work. M2 remains pending; the next software feature is M5 external simulator/offline queue unless the user directs otherwise.
+- Pre-hardware work M5/M6 and local-data M7 is implemented; setup/CI uses docs/TEAM_SETUP.md. Check docs/VALIDATION_PRE_HARDWARE.md for actual local/CI evidence. Physical thresholds, real coordinate transform and M8 require hardware/survey evidence. Do not start unrelated roadmap work automatically.
 
 ## Preserve these contracts
 

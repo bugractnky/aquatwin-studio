@@ -92,3 +92,10 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - UI 11×11 tahmin ızgarası, gerçek ölçülen derinlik profili, kaynak/ayar snapshot'ı ve ayrı görev tahmin farkı gösterir. GNSS derece verisi metre olarak kullanılmaz; gerçek kıyı/batimetri ve doğrulanmış dönüşüm hâlâ veri/donanım bekler.
 - İnceleme sırasında kardeş panel key çakışması ve kalibrasyon eklenirken açık review taslağının yenilenmesi düzeltildi. Milisaniyeli collocated zaman sırası datetime olarak karşılaştırılıyor. Sayısal uç değer özetleri overflow'u açık bırakır; uydurma SD üretmez.
 - Backend toplamı 56 test; son temiz ortam E2E/CI kanıtı VALIDATION_PRE_HARDWARE.md'ye kaydedilir.
+
+## 2026-11-26 — M2 ekip kurulumu ve otomatik kontroller
+
+- scripts/setup.py: kilitli bağımlılıklar, mevcut .env korunması; temiz kaynak kopyasında yeni venv/node_modules ile kurulum doğrulandı.
+- scripts/verify.py: ayrı aquatwin_test* unit/E2E DB doğrulaması, frontend/build/backend kontrolleri, yalnız kendisinin açtığı localhost API/Vite süreçleri ve sonunda cleanup. TIME_WAIT port kontrolü ve ayrı log klasörü ele alındı.
+- GitHub Actions aynı verify komutunu PostgreSQL16/Python3.12/Node20 ortamında çalıştıracak; izin contents:read, checkout credential persistence kapalı, üretim sırrı yok. Test kanıtı artefact olarak tutulur. CI sonucu yerel başarıdan ayrı kaydedilir.
+- Yerel temiz ortamda 56 backend, 18 frontend, 7 E2E ve build geçti; Docker yok, Compose doğrulanmış sayılmıyor. M7 gerçek harita/GNSS ve fiziksel kalite eşikleri hâlâ veriye/donanıma bağlıdır.
