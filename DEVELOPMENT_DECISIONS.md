@@ -32,4 +32,12 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Örnek gönderici deterministik fixture gönderir; tam bot/telemetri simülatörü değildir. Donanım adaptörleri, çevrimdışı cihaz kuyruğu, fiziksel komutlar ve kalibrasyon deneyleri sonraki aşamadır.
 - Bağımlılıklar kilitlendi. Build, mevcut Three.js parçası için 500 kB uyarısı veriyor; build başarısız değil. Backend testlerinde Starlette/httpx deprecation uyarısı bulunuyor; testler geçiyor.
 - Doğrulama PostgreSQL'i sistemdeki mevcut veritabanına dokunmadan ayrı geçici cluster üzerinde çalıştırıldı. Günlük kullanım için `backend/README.md` ile kalıcı PostgreSQL kurulmalıdır. Docker bulunmadığından Compose çalıştırılarak doğrulanmadı.
-- Kod bu aşamada geliştirme branch'ine gönderilir. Main'e merge veya internet yayını yapılmaz.
+- İlk teslim geliştirme branch'ine gönderildi; bu teslim sırasında main merge veya internet yayını yapılmadı. Daha sonra PR #1, `1dd1114` ile main'e merge edildi (2026-11-25 uzak Git geçmişinden doğrulandı).
+
+## 2026-11-25 — Ekip ve AI devir rehberi
+
+- Ortak giriş dosyası `AGENTS.md` ve ayrıntılı `docs/AI_HANDOFF.md` eklendi. Claude/Copilot girişleri aynı kaynaklara yönleniyor; ayrı mimari kuralları çoğaltılmıyor.
+- Tamamlanan ölçüm temeli ile gelecekteki görev/telemetri/simülatör/kalite/analiz/donanım aşamaları ayrıldı. Önerilen sıradaki iş temiz clone ortamı ve CI doğrulaması; bu dokümantasyon değişikliğinde o işler uygulanmadı.
+- Kurulum, dosya sorumlulukları, sözleşme sınırları, test ortamları, Git/commit/push düzeni ve gelecek geliştiricinin belge güncelleme yöntemi kaydedildi.
+- Ölçüm sözleşmesindeki GNSS doğruluğu cümlesi gerçek şemayla hizalandı: `accuracy_m` isteğe bağlı; referanslı yerel koordinat alternatifi geçerli; gerçek derinlik zorunlu. Runtime davranışı değiştirilmedi.
+- Bu teslim yalnız dokümantasyondur. Kaynak ve belge bağlantı tutarlılığı kontrol edilecek; eski 12/17/2 test sonucu yeni çalıştırılmış gibi sunulmayacak.

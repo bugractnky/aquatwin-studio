@@ -18,6 +18,10 @@ Bot ve vinç tabanlı **çok derinlikli su kalitesi izleme** için etkileşimli 
 
 ---
 
+## Ekip üyeleri ve AI ile geliştirme
+
+**Başlangıç noktası: [AGENTS.md](AGENTS.md).** Mevcut mimari, tamamlanan işler, kararlar, clone sonrası kurulum, testler ve sıralı sonraki geliştirmeler [AI devir rehberinde](docs/AI_HANDOFF.md) açıklanır. Repoyu başka bir AI'a verirken önce bu iki dosyayı okumasını isteyin. Claude ve Copilot için de aynı rehbere yönlendiren giriş dosyaları vardır; her aracın otomatik dosya okuma desteği farklı olabilir.
+
 ## Genel bakış
 
 **AquaTwin**, METU NCC göletinde farklı konum ve derinliklerden toplanacak su kalitesi ölçümlerini incelemek için geliştirilen bir **React + Three.js** prototipidir.
