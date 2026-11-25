@@ -2427,3 +2427,10 @@ input[type="search"],
 .telemetry-device dd, .telemetry-events li { overflow-wrap: anywhere; }
 .telemetry-events { padding-left: 24px; }
 .telemetry-events li { margin-bottom: 14px; }
+
+.quality-review { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.quality-review fieldset { min-width: 0; border: 1px solid var(--line); margin: 12px 0; padding: 12px; }
+.quality-review label { display: grid; gap: 6px; margin: 10px 0; }
+.quality-review input:not([type=checkbox]), .quality-review select { width: 100%; min-height: 44px; }
+.quality-review input[type=checkbox] { width: 20px; height: 20px; }
+.quality-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px),1fr)); gap: 12px; }

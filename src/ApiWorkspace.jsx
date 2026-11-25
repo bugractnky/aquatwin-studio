@@ -12,6 +12,7 @@ import OperatorAccess, { useOperator } from "./OperatorAccess.jsx";
 import PlanEditor from "./PlanEditor.jsx";
 import MissionPlan from "./MissionPlan.jsx";
 import TelemetryPanel from "./TelemetryPanel.jsx";
+import QualityReview from "./QualityReview.jsx";
 const Twin = lazy(() => import("./Twin.jsx"));
 
 function usePolledData(path, transform) {
@@ -353,6 +354,7 @@ function MissionData({ mission, operator }) {
             <dt>Ham örnek sayısı</dt>
             <dd>{detail.packet.raw_samples.length}</dd>
           </dl>
+          <QualityReview key={detail.id} record={detail} operator={operator} />
           <details>
             <summary>Orijinal API kaydı ve ham örnekler</summary>
             <pre className="api-json">

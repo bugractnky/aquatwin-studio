@@ -77,3 +77,10 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Timestamp'lar geçmiş sentetik timeline; fiziksel/canlı cihaz başarımı iddia edilmez. Yeni canlı kontrol veya otopilot yok.
 - SQLite yalnız harici cihaz outbox'ı içindir, API DB fallback değildir. Atomik build, kalıcı UUID/payload, 200/201 sonrası ack, backoff, blocked 4xx ve yetki hatasında durma sağlandı. Tek consumer varsayımı belgeli.
 - 49 backend testi geçti: normal/missing/unstable/restart/fault replay, diskten yeniden açılış, tekrar gönderim, backoff ve 409/401 davranışı dahil. UI/testler plan kilidinin yeni sebebini açıklar.
+
+## 2026-11-26 — M6 parametre kalite ve kalibrasyon altyapısı
+
+- Migration 005: append-only kalibrasyon kayıtları ve ölçüm bazlı revision kontrollü parametre değerlendirmeleri. Ham ölçüm ve ingest kalite beyanı değişmez.
+- Özetler ham veriden hesaplanır; eşik yoksa stabilite kararı yok. Eşikler gerekçesiyle açıkça girilir. Kalibrasyon eşleşmesi sensör/parametre/source/tarih/outcome üzerinden doğrulanır; otomatik saha değeri veya kalibrasyon katsayısı üretilmez.
+- Operatör girişi/Origin/CSRF ile yazım; ölçüm ayrıntısında review/history ve kalibrasyon formu. Kayıt tablosu ilk kalite beyanını korur, analiz son parametre review'ını kullanacaktır.
+- 52 backend testi geçti; review çakışması, ham veri koruması, kalibrasyon retry ve hatalı/expired bağlantılar kapsandı. UI uçtan uca doğrulaması bütün aşamalarla birlikte yapılacak.
