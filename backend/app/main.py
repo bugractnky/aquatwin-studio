@@ -1,26 +1,17 @@
 import os
-import secrets
 from contextlib import asynccontextmanager
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Response
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from psycopg.types.json import Jsonb
 
+from .auth import authorize
 from .db import connect, migrate
 from .schemas import MeasurementIn, MissionIn
 from .operator import router as operator_router
 from .plans import router as plans_router
-
-bearer = HTTPBearer(auto_error=False)
-
-
-def authorize(credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]):
-    expected = os.environ['AQUATWIN_INGEST_TOKEN']
-    if not credentials or not secrets.compare_digest(credentials.credentials, expected):
-        raise HTTPException(401, 'Valid ingest token required', headers={'WWW-Authenticate': 'Bearer'})
-
+from .telemetry import router as telemetry_router
 
 @asynccontextmanager
 async def lifespan(app):
@@ -33,6 +24,8 @@ async def lifespan(app):
 app = FastAPI(title='AquaTwin Measurement API', version='0.2.0', lifespan=lifespan)
 app.include_router(operator_router)
 app.include_router(plans_router)
+# Reads remain local/open; device report POST routes require ingest authorization.
+app.include_router(telemetry_router)
 
 
 @app.get('/api/v1/health')

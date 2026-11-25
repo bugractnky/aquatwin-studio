@@ -11,6 +11,7 @@ import {
 import OperatorAccess, { useOperator } from "./OperatorAccess.jsx";
 import PlanEditor from "./PlanEditor.jsx";
 import MissionPlan from "./MissionPlan.jsx";
+import TelemetryPanel from "./TelemetryPanel.jsx";
 const Twin = lazy(() => import("./Twin.jsx"));
 
 function usePolledData(path, transform) {
@@ -58,7 +59,7 @@ export default function ApiWorkspace({ onOpenDemo }) {
   const [creating, setCreating] = useState(false);
   const [createdMission, setCreatedMission] = useState(null);
   useEffect(() => {
-    if (!chosen && missions.data.length) setChosen(missions.data[0].id);
+    if (missions.data.length) setChosen((current) => current || missions.data[0].id);
   }, [chosen, missions.data]);
   const mission =
     missions.data.find((m) => m.id === chosen) ||
@@ -217,6 +218,7 @@ function MissionData({ mission, operator }) {
       {!measurements.loading && !measurements.error && !records.length && (
         <p className="notice info">Bu göreve henüz ölçüm gönderilmedi.</p>
       )}
+      <TelemetryPanel key={mission.id} mission={mission} />
       <MissionPlan
         mission={mission}
         records={records}
@@ -261,8 +263,8 @@ function MissionData({ mission, operator }) {
           parametreyi içeren noktalar gösterilir.
         </p>
         <p>
-          Şematik gölet ve istasyonlar gerçek batimetri değildir. Cihaz
-          telemetrisi bulunmadığından bot/vinç ve rota gösterilmez. Bu aşamada
+          Şematik gölet ve istasyonlar gerçek batimetri değildir. Telemetri ayrı
+          panelde izlenir; sahnede bot/vinç ve rota gösterilmez. Bu aşamada
           yalnız ölçüm noktaları gösterilir.
         </p>
         <Suspense fallback={<p>3D sahne yükleniyor…</p>}>
