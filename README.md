@@ -20,6 +20,8 @@ Bot ve vinç tabanlı **çok derinlikli su kalitesi izleme** için etkileşimli 
 
 ## Ekip üyeleri ve AI ile geliştirme
 
+Her geliştirme oturumunda AI önce [güvenli başlangıç prosedürünü](docs/SESSION_START.md) uygular: yerel işi korur, fetch yapar ve güncel main kontrolünden sonra uygun branch üzerinde başlar. AGENTS, Claude ve Copilot girişleri bu kurala yönlendirir; otomatik okumayan araçlara açıkça okutun.
+
 **Başlangıç noktası: [AGENTS.md](AGENTS.md).** Mevcut mimari, tamamlanan işler, kararlar, clone sonrası kurulum, testler ve sıralı sonraki geliştirmeler [AI devir rehberinde](docs/AI_HANDOFF.md) açıklanır. Repoyu başka bir AI'a verirken önce bu iki dosyayı okumasını isteyin. Claude ve Copilot için de aynı rehbere yönlendiren giriş dosyaları vardır; her aracın otomatik dosya okuma desteği farklı olabilir.
 
 ## Genel bakış

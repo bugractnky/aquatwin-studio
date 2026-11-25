@@ -41,3 +41,10 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Kurulum, dosya sorumlulukları, sözleşme sınırları, test ortamları, Git/commit/push düzeni ve gelecek geliştiricinin belge güncelleme yöntemi kaydedildi.
 - Ölçüm sözleşmesindeki GNSS doğruluğu cümlesi gerçek şemayla hizalandı: `accuracy_m` isteğe bağlı; referanslı yerel koordinat alternatifi geçerli; gerçek derinlik zorunlu. Runtime davranışı değiştirilmedi.
 - Bu teslim yalnız dokümantasyondur. Kaynak ve belge bağlantı tutarlılığı kontrol edilecek; eski 12/17/2 test sonucu yeni çalıştırılmış gibi sunulmayacak.
+
+## 2026-11-25 — Her AI oturumunda güvenli Git başlangıcı
+
+- Kullanıcı ekip merge'lerinin geliştirmeden önce otomatik kontrol edilmesini istedi. SESSION_START.md ortak prosedürü AGENTS, Claude, Copilot, README ve handoff'a bağlandı.
+- Yeni iş: temiz main fast-forward, origin/main ile eşitlik kontrolü, yeni branch. Devam eden iş: branch korunur, main farkları güvenli entegre edilir; yayımlanmış history otomatik rebase edilmez.
+- Dirty alan, başarısız fetch ve ayrışmış history sessiz reset/stash/overwrite ile aşılmaz. Arka plan pull servisi kurulmadı; her AI'ın rehberleri otomatik okuması garanti edilemez.
+- Yalnız belgeler değişti; runtime test sonucu iddia edilmiyor.

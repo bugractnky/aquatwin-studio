@@ -111,6 +111,8 @@ Mevcut `backend/app/main.py` tek uygulama modülüdür. Yeni görev/telemetri mo
 
 ## 5. Clone sonrası ilk çalışma sırası
 
+Her geliştirme oturumunda önce [güvenli başlangıç prosedürünü](SESSION_START.md) otomatik uygula. Yeni iş güncel main’den açılır; devam eden işte branch ve yerel değişiklikler korunur. Senkronizasyondan sonra güncel rehberleri yeniden oku.
+
 1. Kullanıcının güncel isteğini oku; donanım durumu değişmiş mi öğren. Repodan anlaşılabilen şeyi tekrar sorma.
 2. `git status --short --branch` ve son commit'leri kontrol et. Başkasının değişikliklerini silme veya kendi commit'ine katma.
 3. `AGENTS.md`, bu rehber, karar kaydı ve ölçüm sözleşmesini oku. Etkilenen kod/test dosyalarını ardından incele.
