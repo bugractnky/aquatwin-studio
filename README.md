@@ -220,7 +220,7 @@ Bu kontroller tam WCAG uygunluğu, saha güvenliği veya gerçek kullanıcı ba�
 
 [API çalışma alanı ekranı](docs/images/api-workspace.png) · [Doğrulama kaydı](docs/VALIDATION_MEASUREMENT_API.md)
 
-PostgreSQL üzerinde 30 backend testi ve gerçek API/veritabanına bağlanan 4 Playwright tarayıcı senaryosu bulunur. Kurulum ve ayrı test veritabanı ayrıntıları [backend/README.md](backend/README.md) içinde. E2E testleri yalnız sentetik görev oluşturur; fiziksel cihaza komut göndermez.
+PostgreSQL üzerinde 56 backend testi ve gerçek API/veritabanına bağlanan 7 Playwright tarayıcı senaryosu bulunur. Kurulum ve ayrı test veritabanı ayrıntıları [backend/README.md](backend/README.md) içinde. E2E testleri yalnız sentetik görev oluşturur; fiziksel cihaza komut göndermez.
 
 ```bash
 # API ve Vite (5176) açıkken, token API ile aynı olmalı:

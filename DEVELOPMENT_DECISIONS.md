@@ -99,3 +99,5 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - scripts/verify.py: ayrı aquatwin_test* unit/E2E DB doğrulaması, frontend/build/backend kontrolleri, yalnız kendisinin açtığı localhost API/Vite süreçleri ve sonunda cleanup. TIME_WAIT port kontrolü ve ayrı log klasörü ele alındı.
 - GitHub Actions aynı verify komutunu PostgreSQL16/Python3.12/Node20 ortamında çalıştıracak; izin contents:read, checkout credential persistence kapalı, üretim sırrı yok. Test kanıtı artefact olarak tutulur. CI sonucu yerel başarıdan ayrı kaydedilir.
 - Yerel temiz ortamda 56 backend, 18 frontend, 7 E2E ve build geçti; Docker yok, Compose doğrulanmış sayılmıyor. M7 gerçek harita/GNSS ve fiziksel kalite eşikleri hâlâ veriye/donanıma bağlıdır.
+
+- M2 CI kanıtı: 27fe2a8 üzerinde PR run 45719048255 ve push run 45718923840 success tamamlandı; yerel kanıttan ayrı GitHub ortamı doğrulandı. Linkler VALIDATION_PRE_HARDWARE.md'de.

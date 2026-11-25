@@ -25,4 +25,6 @@ Docker/Compose bu ortamda mevcut değil; native PostgreSQL yolu kullanıldı. Ge
 
 Masaüstü ve 390 px mobil ekranlar incelendi; yatay sayfa taşması ve pageerror kontrolleri geçti. Testlerin ortaya çıkardığı duplicate React key ve kalibrasyon sonrası taslak reset sorunu düzeltildi. Native select testleri erişilebilir combobox rolüyle seçiliyor. Kesirli timestamp sırası datetime karşılaştırmasıyla test edildi. Starlette/httpx deprecation ve Three.js chunk uyarıları devam ediyor.
 
-CI durumu: workflow bu branch’e eklenecek; henüz GitHub koşusu doğrulanmadı.
+## GitHub CI kanıtı
+
+`27fe2a8f17003612627b62b47cf8915a148695fa` üzerinde 2026-11-26 tarihinde hem [PR koşusu](https://github.com/bugractnky/aquatwin-studio/actions/runs/45719048255) hem [push koşusu](https://github.com/bugractnky/aquatwin-studio/actions/runs/45718923840) **success** tamamlandı. Ubuntu24.04, PostgreSQL16 servisinde Node20/Python3.12 ve indirilen Chromium kullanıldı. Ortam kurulumu, shared verify ve evidence upload adımları geçti. Bu kayıt belirtilen commit'in kanıtıdır; ilerideki commit'lerin check durumunu ayrıca kontrol edin.

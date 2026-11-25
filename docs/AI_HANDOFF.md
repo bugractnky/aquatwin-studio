@@ -136,9 +136,9 @@ Kapsam: ölçüm sözleşmesi, PostgreSQL API, harici fixture gönderimi, React/
 
 Bitiş kanıtı: `7fe1bca` içeriği, PR #1 ve [doğrulama kaydı](VALIDATION_MEASUREMENT_API.md). Bu kayıt geçmiş koşullardaki doğrulamadır; her makinede otomatik test geçmiş sayılmaz.
 
-### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — KURULUM/CI EKLENDİ
+### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — NATIVE ORTAM VE CI DOĞRULANDI
 
-[TEAM_SETUP.md](TEAM_SETUP.md): temiz kaynak kurulumu ve tek komut doğrulama. Docker yok; native PostgreSQL yolu kullanıldı. CI dosyasının bulunması başarılı koşu kanıtı değildir; doğrulama kaydındaki gerçek sonucu esas al.
+[TEAM_SETUP.md](TEAM_SETUP.md): temiz kaynak kurulumu ve tek komut doğrulama. Native PostgreSQL ve GitHub CI başarı kanıtı [VALIDATION_PRE_HARDWARE.md](VALIDATION_PRE_HARDWARE.md) içinde. Docker yok; Compose yolu çalıştırılarak doğrulanmadı. Yeni commit’lerin CI durumu ayrıca kontrol edilmeli.
 
 Amaç: takım arkadaşının kendi makinesinde aynı akışı kurabilmesi; mevcut geçici doğrulama ortamına bağımlılığın kaldırılması.
 
