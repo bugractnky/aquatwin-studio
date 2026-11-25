@@ -81,6 +81,10 @@ test("telemetry preserves ordering, ages independently, survives outage and isol
   const panel = page.getByRole("region", {
     name: "Telemetri ve görev olayları",
   });
+  await expect(
+    page.getByRole("heading", { name: mission.name, exact: true }),
+  ).toBeVisible();
+  await expect(panel).toHaveCount(1);
   await expect(panel).toContainText("E2E-BOAT");
   await expect(panel).toContainText("2 m / 1.9 m");
   await expect(panel).toContainText("Synthetic station arrival");

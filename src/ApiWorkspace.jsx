@@ -13,6 +13,7 @@ import PlanEditor from "./PlanEditor.jsx";
 import MissionPlan from "./MissionPlan.jsx";
 import TelemetryPanel from "./TelemetryPanel.jsx";
 import QualityReview from "./QualityReview.jsx";
+import AnalysisPanel from "./AnalysisPanel.jsx";
 const Twin = lazy(() => import("./Twin.jsx"));
 
 function usePolledData(path, transform) {
@@ -60,7 +61,8 @@ export default function ApiWorkspace({ onOpenDemo }) {
   const [creating, setCreating] = useState(false);
   const [createdMission, setCreatedMission] = useState(null);
   useEffect(() => {
-    if (missions.data.length) setChosen((current) => current || missions.data[0].id);
+    if (missions.data.length)
+      setChosen((current) => current || missions.data[0].id);
   }, [chosen, missions.data]);
   const mission =
     missions.data.find((m) => m.id === chosen) ||
@@ -146,13 +148,18 @@ export default function ApiWorkspace({ onOpenDemo }) {
         </div>
       )}
       {mission && (
-        <MissionData key={mission.id} mission={mission} operator={operator} />
+        <MissionData
+          key={mission.id}
+          mission={mission}
+          operator={operator}
+          missions={missions.data}
+        />
       )}
     </main>
   );
 }
 
-function MissionData({ mission, operator }) {
+function MissionData({ mission, operator, missions }) {
   const measurements = usePolledData(
     `/api/v1/measurements?mission_id=${encodeURIComponent(mission.id)}`,
     toDisplayRecord,
@@ -219,7 +226,12 @@ function MissionData({ mission, operator }) {
       {!measurements.loading && !measurements.error && !records.length && (
         <p className="notice info">Bu göreve henüz ölçüm gönderilmedi.</p>
       )}
-      <TelemetryPanel key={mission.id} mission={mission} />
+      <p className="notice info">
+        Tablo, geçerli kayıt sayısı ve plan karşılaştırması ilk ingest kalite
+        beyanını gösterir. Güncel parametre değerlendirmesi ölçüm ayrıntısında;
+        analiz bu son değerlendirmeyi kullanır.
+      </p>
+      <TelemetryPanel mission={mission} />
       <MissionPlan
         mission={mission}
         records={records}
@@ -302,6 +314,7 @@ function MissionData({ mission, operator }) {
           işaretlenir.
         </p>
       </section>
+      <AnalysisPanel mission={mission} missions={missions} />
       <RecordsTable
         records={records}
         filters={filters}

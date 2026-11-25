@@ -84,3 +84,11 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Özetler ham veriden hesaplanır; eşik yoksa stabilite kararı yok. Eşikler gerekçesiyle açıkça girilir. Kalibrasyon eşleşmesi sensör/parametre/source/tarih/outcome üzerinden doğrulanır; otomatik saha değeri veya kalibrasyon katsayısı üretilmez.
 - Operatör girişi/Origin/CSRF ile yazım; ölçüm ayrıntısında review/history ve kalibrasyon formu. Kayıt tablosu ilk kalite beyanını korur, analiz son parametre review'ını kullanacaktır.
 - 52 backend testi geçti; review çakışması, ham veri koruması, kalibrasyon retry ve hatalı/expired bağlantılar kapsandı. UI uçtan uca doğrulaması bütün aşamalarla birlikte yapılacak.
+
+## 2026-11-26 — M7 yerel koordinat API analizi
+
+- Tek görev/zaman/parametre/referans seçimi; son istasyon/hedef denemesi seçildikten sonra son parametre review'ı (yoksa ingest) kalite kaynağıdır. Son deneme geçersizse eski valid'e sessiz fallback yapılmaz.
+- idw-local-v1: normalize IDW ağırlıkları, açık power/depth_scale/radius, measured/interpolated/no-support ayrımı ve istasyon bazında dışarıda bırakma. Yarıçap maskesi istatistiksel belirsizlik veya dışbükey zarf değildir.
+- UI 11×11 tahmin ızgarası, gerçek ölçülen derinlik profili, kaynak/ayar snapshot'ı ve ayrı görev tahmin farkı gösterir. GNSS derece verisi metre olarak kullanılmaz; gerçek kıyı/batimetri ve doğrulanmış dönüşüm hâlâ veri/donanım bekler.
+- İnceleme sırasında kardeş panel key çakışması ve kalibrasyon eklenirken açık review taslağının yenilenmesi düzeltildi. Milisaniyeli collocated zaman sırası datetime olarak karşılaştırılıyor. Sayısal uç değer özetleri overflow'u açık bırakır; uydurma SD üretmez.
+- Backend toplamı 56 test; son temiz ortam E2E/CI kanıtı VALIDATION_PRE_HARDWARE.md'ye kaydedilir.

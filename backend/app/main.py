@@ -14,6 +14,7 @@ from .plans import router as plans_router
 from .telemetry import router as telemetry_router
 from .simulation import router as simulation_router
 from .quality import router as quality_router
+from .analysis import router as analysis_router
 
 @asynccontextmanager
 async def lifespan(app):
@@ -30,6 +31,7 @@ app.include_router(plans_router)
 app.include_router(telemetry_router)
 app.include_router(simulation_router)
 app.include_router(quality_router)
+app.include_router(analysis_router)
 
 
 @app.get('/api/v1/health')
