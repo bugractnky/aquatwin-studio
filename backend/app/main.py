@@ -10,6 +10,8 @@ from psycopg.types.json import Jsonb
 
 from .db import connect, migrate
 from .schemas import MeasurementIn, MissionIn
+from .operator import router as operator_router
+from .plans import router as plans_router
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -28,7 +30,9 @@ async def lifespan(app):
     yield
 
 
-app = FastAPI(title='AquaTwin Measurement API', version='0.1.0', lifespan=lifespan)
+app = FastAPI(title='AquaTwin Measurement API', version='0.2.0', lifespan=lifespan)
+app.include_router(operator_router)
+app.include_router(plans_router)
 
 
 @app.get('/api/v1/health')
@@ -65,7 +69,7 @@ def list_missions(limit: Annotated[int, Query(ge=1, le=200)] = 100, offset: Anno
 def ingest(body: MeasurementIn, response: Response):
     payload = body.model_dump(mode='json')
     with connect() as conn:
-        mission = conn.execute('SELECT source FROM missions WHERE id=%s', (body.mission_id,)).fetchone()
+        mission = conn.execute('SELECT source FROM missions WHERE id=%s FOR UPDATE', (body.mission_id,)).fetchone()
         if not mission:
             raise HTTPException(404, 'Mission not found')
         if mission['source'] != body.source:

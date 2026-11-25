@@ -25,6 +25,7 @@ Repo: https://github.com/bugractnky/aquatwin-studio
 | FastAPI/PostgreSQL ölçüm akışı | Uygulandı | `backend/app/main.py`, `backend/app/db.py`, `backend/migrations/001_initial.sql` |
 | Harici deterministik örnek gönderici | Uygulandı | `backend/send_sample.py` |
 | API görev seçimi, tablo ve şematik 3D ölçüm noktaları | Uygulandı | `src/ApiWorkspace.jsx`, `src/api.js` |
+| Kalıcı görev planı ve operatör oturumu | Uygulandı (M3 branch teslimi) | `src/PlanEditor.jsx`, `src/MissionPlan.jsx`, `backend/app/plans.py`, `backend/app/operator.py` |
 | Fiziksel bot/vinç kontrolü ve sensör sürücüleri | Uygulanmadı | Donanım ve protokol bekleniyor |
 | Canlı cihaz telemetrisi ve komut onayları | Uygulanmadı | API sorgulama saati telemetri değildir |
 | Cihazda kalıcı çevrimdışı kuyruk | Uygulanmadı | Örnek göndericiyi kuyruk sanma |
@@ -71,7 +72,7 @@ API: backend/send_sample.py veya gelecekte cihaz adaptörü
 | `src/*.test.js` | Frontend model/adaptör testleri |
 | `e2e/measurement-flow.spec.js` | Gerçek API/DB üzerinden Playwright senaryoları |
 
-Mevcut `backend/app/main.py` tek uygulama modülüdür. Yeni görev/telemetri modülleri büyürken route ve servisleri ayır; sırf stil için bütün backend'i yeniden yazma. Framework değiştirme veya ayrı repo açma mevcut planın parçası değildir.
+Ölçüm route'ları `backend/app/main.py`, planlar `backend/app/plans.py`, operatör oturumu `backend/app/operator.py` içinde bulunur. Yeni görev/telemetri modülleri büyürken route ve servisleri ayır; sırf stil için bütün backend'i yeniden yazma. Framework değiştirme veya ayrı repo açma mevcut planın parçası değildir.
 
 ## 4. Birbirimizle çelişmemek için koruyacağımız kararlar
 
@@ -106,6 +107,7 @@ Mevcut `backend/app/main.py` tek uygulama modülüdür. Yeni görev/telemetri mo
 - API poll süresi 5 saniye, istek zaman aşımı 8 saniye; ekran başına mevcut koruma sınırı 10.000 kayıttır. Bunlar cihaz örnekleme gereksinimi değildir.
 - API kesilince son başarılı veri korunur ve uyarı görünür; sessiz demo fallback yapılmaz.
 - Yazma token'ı `AQUATWIN_INGEST_TOKEN` ile yalnız backend/cihaz tarafında tutulur; `VITE_*` içine, kaynak koda veya commit'e konulmaz.
+- Plan yazımı ayrı operatör oturumu, Origin ve CSRF ile korunur; ayrıntılar `docs/MISSION_PLANNING.md` içinde. İlk ölçüm sonrası plan kilitlenir.
 - Mevcut GET uçları yerel kullanım için açıktır; bu internet kullanımı için tam yetkilendirme değildir. HTTPS, kullanıcı rolleri ve yayınlama ayrı iş paketidir.
 - Mevcut demo engelleri fiziksel güvenlik sertifikası değildir. Gerçek hareket kısıtları cihaz yazılımında da uygulanmalıdır.
 
@@ -126,7 +128,7 @@ Kurulumun tek ayrıntılı kaynağı [backend/README.md](../backend/README.md) v
 
 ## 6. Bundan sonraki adım adım plan
 
-Aşağıdaki M1 tamamlanmıştır. **Yeni bir öncelik verilmediyse önerilen sonraki geliştirme M2'dir.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
+Aşağıdaki M1 tamamlanmıştır. **Kullanıcı M2 yerine yazılım özelliği M3'ü önceliklendirdi; M3 uygulandı. Sıradaki yazılım özelliği M4, M2 ortam/CI işi hâlâ bekliyor.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
 
 ### M1 — Kalıcı ölçüm temeli — TAMAMLANDI
 
@@ -134,7 +136,7 @@ Kapsam: ölçüm sözleşmesi, PostgreSQL API, harici fixture gönderimi, React/
 
 Bitiş kanıtı: `7fe1bca` içeriği, PR #1 ve [doğrulama kaydı](VALIDATION_MEASUREMENT_API.md). Bu kayıt geçmiş koşullardaki doğrulamadır; her makinede otomatik test geçmiş sayılmaz.
 
-### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — SIRADAKİ
+### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — ERTELENDİ
 
 Amaç: takım arkadaşının kendi makinesinde aynı akışı kurabilmesi; mevcut geçici doğrulama ortamına bağımlılığın kaldırılması.
 
@@ -147,17 +149,19 @@ Amaç: takım arkadaşının kendi makinesinde aynı akışı kurabilmesi; mevcu
 
 Bitiş ölçütü: temiz ortamda örnek ölçüm kalıcı olarak görülür; tekrar açılışta korunur; CI gerçekten koşmuş ve sonuçları kaydedilmiştir. Çıktı: kurulum güncellemesi, CI dosyaları ve güncel doğrulama kaydı.
 
-### M3 — Kalıcı görev planı — PLANLANDI
+### M3 — Kalıcı görev planı — UYGULANDI
+
+Uygulama ve kurallar: [MISSION_PLANNING.md](MISSION_PLANNING.md). Doğrulama: [VALIDATION_MISSION_PLANNING.md](VALIDATION_MISSION_PLANNING.md). Aşağıdaki kapsam bu aşamada karşılandı; PR merge durumu Git geçmişinden ayrıca doğrulanmalı.
 
 1. Görevin adı/kaynağı dışında planlanan istasyonları ve hedef derinlikleri modelle. Gerçekleşen ölçümler bu plandan ayrı tutulur.
 2. Uygun yeni migration ve API işlemleri ekle; plan düzenlenmesi ile mevcut ölçümün immutable kimliği karışmasın.
 3. Yerel koordinatlı sentetik plan ve daha sonra coğrafi plan için referans bilgisini açık tut.
-4. API alanına görev/plan oluşturma ve görüntüleme ekle; token'ı frontend'e gömme. Kullanıcı yazma yetkisi için uygun yerel sunucu/oturum yaklaşımını önce tasarla; mevcut ingest token'ını tarayıcıya kopyalamak çözüm değildir.
+4. API alanına görev/plan oluşturma ve görüntüleme ekle; token'ı frontend'e gömme. Uygulanan yaklaşım ayrı operatör parolası, HttpOnly oturum, Origin ve CSRF doğrulamasıdır; mevcut ingest token'ı tarayıcıya kopyalanmaz.
 5. Aktif görev seçimi, zaman/istasyon/derinlik filtreleri ve geçmiş görevler arasında tutarlı seçim sağla.
 
 Bitiş ölçütü: görev planı veritabanında saklanır; görev değişince ölçümler karışmaz; plan oluşturmak botu hareket ettirmez. API yetkilendirme yaklaşımı karar kaydına yazılmıştır.
 
-### M4 — Telemetri ve olay sözleşmesi — PLANLANDI
+### M4 — Telemetri ve olay sözleşmesi — SIRADAKİ YAZILIM ÖZELLİĞİ
 
 1. Ölçümden ayrı telemetri modeli tanımla: cihaz kimliği, cihaz zamanı, sunucu alım zamanı, bağlantı oturumu, sıralama ve geçerlilik.
 2. Destekleniyorsa konum, gerçek/hedef derinlik, vinç aşaması ve hata kodları ekle; donanımda olmayan alanları bilinmiyor bırak.
@@ -217,6 +221,8 @@ Bitiş ölçütü: gerçek ölçüm gerçek sensör kimliği/kalibrasyon bilgisi
 Yeterli veri ve zaman varsa GP/Kriging karşılaştırması, kalibre belirsizlik, operatöre örnekleme önerileri ve geçmiş telemetri replay'i eklenebilir. Manuel bot kapsamı kendiliğinden otonom navigasyona çevrilmez. İnternet yayını ayrıca kullanıcı/cihaz yetkilendirmesi, HTTPS, secret yönetimi, yedekleme ve işletim planı gerektirir; branch merge etmek yayın değildir.
 
 ## 7. Test ve doğrulama kuralları
+
+M3 doğrulamasında 30 backend testi, 16 frontend birim testi, 4 Playwright senaryosu ve build geçti. Ayrı E2E ortamında `E2E_OPERATOR_PASSWORD` gerekir. Ayrıntılar ilgili M3 doğrulama kaydında; yeni işte kontrolleri tekrar çalıştır.
 
 2026-11-25 ölçüm temeli doğrulamasında 12 frontend testi, 17 backend testi, 2 Playwright senaryosu ve build geçti. Bunlar tarihsel başlangıç sayılarıdır; yeni test eklenince sayı değişebilir. Şu an çalıştırmadığın testi geçmiş kayıttan yola çıkarak "geçti" diye sunma.
 

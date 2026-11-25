@@ -131,6 +131,12 @@ Kararlar ve yapılan geliştirmeler: [DEVELOPMENT_DECISIONS.md](DEVELOPMENT_DECI
 | `npm run build` | Üretim dosyalarını `dist/` klasörüne derler. |
 | `npm test` | Model ve temel renk karşıtlığı testlerini çalıştırır. |
 
+## Kalıcı görev planlama
+
+API çalışma alanında ayrı operatör oturumuyla görev, sıralı istasyonlar, konumlar ve hedef derinlikler oluşturulabilir. Planlar PostgreSQL'de saklanır, ilk ölçüme kadar sürüm kontrollü düzenlenebilir; ölçümden sonra geçmişi korumak için kilitlenir. Plan/ölçüm tablosu hedef ile ölçülen derinliği ayrı gösterir. Plan kaydetmek fiziksel hareket başlatmaz.
+
+Operatör girişi için backend'de `AQUATWIN_OPERATOR_PASSWORD` gerekir; cihaz token'ı tarayıcıya konulmaz. Kurulum ve API: [Görev planlama rehberi](docs/MISSION_PLANNING.md). [Yeni doğrulama kaydı](docs/VALIDATION_MISSION_PLANNING.md).
+
 ## İzlenen parametreler
 
 | Parametre | Alan | Birim |
@@ -150,6 +156,10 @@ Her kayıt ayrıca görev/istasyon kimliğini, zamanı, yerel konumu, örnek say
 src/
 ├── SourceApp.jsx           Demo/API çalışma alanı seçimi
 ├── ApiWorkspace.jsx        Kalıcı görev ve ölçüm görünümü
+├── OperatorAccess.jsx      Ayrı operatör oturumu
+├── PlanEditor.jsx          Görev/istasyon/derinlik planı formu
+├── MissionPlan.jsx         Plan ve ölçüm karşılaştırması
+├── planning.js             Plan doğrulama ve API işlemleri
 ├── api.js                  API sözleşmesi ve görüntüleme adaptörü
 ├── App.jsx                 Çalışma alanları ve ortak arayüz durumu
 ├── Twin.jsx                Three.js sahnesi, bot/pod ve mekânsal katmanlar
@@ -186,7 +196,7 @@ Gerçek batimetri, GNSS koordinat dönüşümü, sensör kalibrasyonu, kablo uzu
 
 ## Doğrulama
 
-Frontend birim test paketi **12 kontrol** içerir; mevcut demo/model kontrollerine eksik parametre, koordinat referansı, API birim doğrulama ve görev ayrımı eklendi:
+Frontend birim test paketi **16 kontrol** içerir; mevcut demo/model kontrollerine eksik parametre, koordinat referansı, API birim doğrulama ve görev ayrımı eklendi:
 
 - Açık ve koyu temada temel semantik metin renklerinin karşıtlığı.
 - Dip mesafesi, toplama öncesi hareket engeli ve doğru görev bitişi.
@@ -202,7 +212,7 @@ Bu kontroller tam WCAG uygunluğu, saha güvenliği veya gerçek kullanıcı ba�
 
 [API çalışma alanı ekranı](docs/images/api-workspace.png) · [Doğrulama kaydı](docs/VALIDATION_MEASUREMENT_API.md)
 
-PostgreSQL üzerinde 17 backend testi ve gerçek API/veritabanına bağlanan 2 Playwright tarayıcı senaryosu bulunur. Kurulum ve ayrı test veritabanı ayrıntıları [backend/README.md](backend/README.md) içinde. E2E testleri yalnız sentetik görev oluşturur; fiziksel cihaza komut göndermez.
+PostgreSQL üzerinde 30 backend testi ve gerçek API/veritabanına bağlanan 4 Playwright tarayıcı senaryosu bulunur. Kurulum ve ayrı test veritabanı ayrıntıları [backend/README.md](backend/README.md) içinde. E2E testleri yalnız sentetik görev oluşturur; fiziksel cihaza komut göndermez.
 
 ```bash
 # API ve Vite (5176) açıkken, token API ile aynı olmalı:

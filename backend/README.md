@@ -34,7 +34,7 @@ Migration'lar API açılışında işlem içinde ve migration kilidiyle uygulan�
 
 - Sağlık: `http://127.0.0.1:8000/api/v1/health`
 - Etkileşimli sözleşme: `http://127.0.0.1:8000/docs`
-- Okuma uçları yerel geliştirme için açık; POST uçları Bearer token gerektirir. Bu sürüm internete yayınlanmak için hazırlanmış değildir.
+- Okuma uçları yerel geliştirme için açık; mevcut ölçüm/görev ingest POST uçları Bearer token gerektirir. Tarayıcı planlama uçları ayrı operatör oturumu, Origin ve CSRF doğrulaması kullanır. Bu sürüm internete yayınlanmak için hazırlanmış değildir.
 
 ## Örnek ölçüm gönderme
 
@@ -64,3 +64,13 @@ TEST_DATABASE_URL=postgresql://aquatwin:YOUR_PASSWORD@127.0.0.1:54329/aquatwin_t
 Testler yalnız adı `aquatwin_test` ile başlayan veritabanında çalışır. UUID'lerle ayrılmış fixture kayıtları ekler, var olan verileri silmez. Test veritabanını geliştirme veya saha verisi için kullanmayın.
 
 Sözleşme: [MEASUREMENT_CONTRACT.md](../docs/MEASUREMENT_CONTRACT.md). Kararlar: [DEVELOPMENT_DECISIONS.md](../DEVELOPMENT_DECISIONS.md).
+
+## Arayüzden görev planlama
+
+`backend/.env` içine cihaz token'ından farklı, en az 16 karakterli `AQUATWIN_OPERATOR_PASSWORD` ekleyin; sunucuyu bu ortamla yeniden başlatın. API alanında operatör girişi yapıp **Yeni görev oluştur** ile istasyonları ve hedef derinlikleri kaydedin. Parola yoksa API ölçüm okuma çalışır, planlama girişi kapalıdır.
+
+Vite başka port kullanıyorsa `AQUATWIN_OPERATOR_ORIGINS` içine tam frontend Origin adresini ekleyin. Varsayılanlar localhost/127.0.0.1 için 5173 ve 5176'dır. HttpOnly/SameSite oturumu 8 saat geçerlidir. Bu yerel operatör girişi çok kullanıcılı internet yetkilendirmesi değildir.
+
+Ayrıntılı plan sözleşmesi, düzenleme/kilit kuralları ve konum biçimleri: [MISSION_PLANNING.md](../docs/MISSION_PLANNING.md).
+
+Planlama E2E senaryoları için ayrı E2E API/veritabanı kullanın ve `E2E_OPERATOR_PASSWORD` değerini o API'nin operatör parolasıyla eşleştirin. `E2E_BASE_URL` ve `E2E_API_URL` farklı portları destekler; Origin izin listesi de buna uygun olmalı. Test parolasını gerçek kullanıcı parolası olarak kullanmayın; ingest token'ını React tarafına vermeyin.
