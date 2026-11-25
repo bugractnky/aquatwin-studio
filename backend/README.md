@@ -74,3 +74,15 @@ Vite başka port kullanıyorsa `AQUATWIN_OPERATOR_ORIGINS` içine tam frontend O
 Ayrıntılı plan sözleşmesi, düzenleme/kilit kuralları ve konum biçimleri: [MISSION_PLANNING.md](../docs/MISSION_PLANNING.md).
 
 Planlama E2E senaryoları için ayrı E2E API/veritabanı kullanın ve `E2E_OPERATOR_PASSWORD` değerini o API'nin operatör parolasıyla eşleştirin. `E2E_BASE_URL` ve `E2E_API_URL` farklı portları destekler; Origin izin listesi de buna uygun olmalı. Test parolasını gerçek kullanıcı parolası olarak kullanmayın; ingest token'ını React tarafına vermeyin.
+
+## Telemetri ve görev olayları
+
+Migration 003 API yeniden başlatılınca uygulanır. Ölçüm sözleşmesi değişmez. Yeni POST `/api/v1/telemetry` ve `/api/v1/events` mevcut ingest token'ını ister. Son snapshot ve olaylar API çalışma alanında görev bazında görüntülenir. [Sözleşme ve sıralama kuralları](../docs/TELEMETRY_CONTRACT.md).
+
+Yerel API ile aynı token ortamda yüklüyken tek seferlik sentetik örnek:
+
+```bash
+python backend/send_telemetry.py --mission telemetry-fixture
+```
+
+Yeni komut çağrısı yeni sentetik oturum oluşturur. Gönderici durunca rapor 15 saniyede gecikmiş, 60 saniyede telemetri yok durumuna geçer. Bu fiziksel bağlantı kanıtı değildir; M5 canlı simülatörü veya offline kuyruk henüz yoktur. Token frontend'e verilmez.

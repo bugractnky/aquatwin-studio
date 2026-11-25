@@ -60,3 +60,13 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Yeni iş: temiz main fast-forward, origin/main ile eşitlik kontrolü, yeni branch. Devam eden iş: branch korunur, main farkları güvenli entegre edilir; yayımlanmış history otomatik rebase edilmez.
 - Dirty alan, başarısız fetch ve ayrışmış history sessiz reset/stash/overwrite ile aşılmaz. Arka plan pull servisi kurulmadı; her AI'ın rehberleri otomatik okuması garanti edilemez.
 - Yalnız belgeler değişti; runtime test sonucu iddia edilmiyor.
+
+## 2026-11-26 — M4 telemetri ve görev olayları
+
+- Güncel main 9866e52 üzerinden feat/telemetry-events açıldı. Kullanıcı bir sonraki yazılım adımını istedi; M2 ertelenmiş durumu korunuyor.
+- HTTP/5 saniye sorgu yeterli görüldü; ölçülmüş ihtiyaç olmadan MQTT/WebSocket eklenmedi. Snapshot ve olaylar ölçümlerden ayrı, migration 003 ile kalıcı.
+- Telemetri ve olay ingest yetkisi ortak auth modülüne taşınan mevcut Bearer kontrolüyle korunuyor; tarayıcıya token eklenmedi.
+- UUID/idempotency, değişmez oturum başlangıcı, ayrı sıra sayaçları; son cihaz snapshot'ı oturum başlangıcı + sequence ile seçiliyor. Geç gelen eski paket güncel durumu değiştirmiyor. Clock/session sınırlamaları TELEMETRY_CONTRACT.md'de.
+- Bilinmeyen alanlar null, invalid son rapor önceki valid raporla gizlenmez. Yaş sunucunun cihaz/alım zamanından türetilir; retry yaşı sıfırlamaz. 15/60 saniye eşikleri ve 30 saniye ileri saat toleransı saha doğrulanmış gereksinim değil, geçici yazılım kararlarıdır.
+- UI son raporu API hatasında korur, API erişimi ve telemetri güncelliğini ayırır. İlk liste yüklenirken manuel görev seçimini ezebilen stale closure, functional state update ile düzeltildi.
+- Tek seferlik sentetik gönderici eklendi; gerçek motor/sensör entegrasyonu ve çevrimdışı kuyruk yapılmadı. Ayrıntılı güncel test kanıtı VALIDATION_TELEMETRY.md'de tutulur.

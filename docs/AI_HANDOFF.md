@@ -1,6 +1,6 @@
 # AquaTwin ortak yazılım planı ve AI devir rehberi
 
-Son içerik incelemesi: 2026-11-25. Dil: Türkçe. Bu belge yeni bir ekip üyesinin veya AI yardımcısının mevcut sistemi anlaması ve aynı plan üzerinden devam etmesi içindir.
+Son içerik incelemesi: 2026-11-26. Dil: Türkçe. Bu belge yeni bir ekip üyesinin veya AI yardımcısının mevcut sistemi anlaması ve aynı plan üzerinden devam etmesi içindir.
 
 **Önce kökteki [AGENTS.md](../AGENTS.md) okunur; ardından bu belge tamamlanır.** Bu rehberdeki gelecek işler, kullanıcı ayrıca istemedikçe kendiliğinden uygulanacak bir görev listesi değildir. Kullanıcının güncel isteğini bu planla birlikte değerlendir.
 
@@ -27,7 +27,7 @@ Repo: https://github.com/bugractnky/aquatwin-studio
 | API görev seçimi, tablo ve şematik 3D ölçüm noktaları | Uygulandı | `src/ApiWorkspace.jsx`, `src/api.js` |
 | Kalıcı görev planı ve operatör oturumu | Uygulandı (M3 branch teslimi) | `src/PlanEditor.jsx`, `src/MissionPlan.jsx`, `backend/app/plans.py`, `backend/app/operator.py` |
 | Fiziksel bot/vinç kontrolü ve sensör sürücüleri | Uygulanmadı | Donanım ve protokol bekleniyor |
-| Canlı cihaz telemetrisi ve komut onayları | Uygulanmadı | API sorgulama saati telemetri değildir |
+| Telemetri/olay API ve izleme paneli | Uygulandı (M4 branch teslimi) | `backend/app/telemetry.py`, `src/TelemetryPanel.jsx`; gerçek donanım ve komut onayı yok |
 | Cihazda kalıcı çevrimdışı kuyruk | Uygulanmadı | Örnek göndericiyi kuyruk sanma |
 | Gerçek gölet haritası, batimetri ve GNSS dönüşümü | Uygulanmadı | Mevcut geometri şematik |
 | API verisi üzerinde IDW/GP/Kriging analizi | Uygulanmadı | IDW yalnız demo analizinde; GP/Kriging yok |
@@ -128,7 +128,7 @@ Kurulumun tek ayrıntılı kaynağı [backend/README.md](../backend/README.md) v
 
 ## 6. Bundan sonraki adım adım plan
 
-Aşağıdaki M1 tamamlanmıştır. **Kullanıcı M2 yerine yazılım özelliği M3'ü önceliklendirdi; M3 uygulandı. Sıradaki yazılım özelliği M4, M2 ortam/CI işi hâlâ bekliyor.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
+Aşağıdaki M1 tamamlanmıştır. **Kullanıcı M2 yerine yazılım özelliği M3'ü önceliklendirdi; M3 uygulandı. M4 uygulandı; sıradaki yazılım özelliği M5, M2 ortam/CI işi hâlâ bekliyor.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
 
 ### M1 — Kalıcı ölçüm temeli — TAMAMLANDI
 
@@ -161,7 +161,9 @@ Uygulama ve kurallar: [MISSION_PLANNING.md](MISSION_PLANNING.md). Doğrulama: [V
 
 Bitiş ölçütü: görev planı veritabanında saklanır; görev değişince ölçümler karışmaz; plan oluşturmak botu hareket ettirmez. API yetkilendirme yaklaşımı karar kaydına yazılmıştır.
 
-### M4 — Telemetri ve olay sözleşmesi — SIRADAKİ YAZILIM ÖZELLİĞİ
+### M4 — Telemetri ve olay sözleşmesi — UYGULANDI
+
+[Sözleşme](TELEMETRY_CONTRACT.md), [doğrulama](VALIDATION_TELEMETRY.md). HTTP snapshot/olay alımı, migration 003, oturum/sıra koruması ve API paneli eklendi. Gerçek donanım yok; 15/60 sn eşikleri geçici tercihler. `send_telemetry.py` tek seferlik fixture aracıdır, M5 canlı simülatörü değildir.
 
 1. Ölçümden ayrı telemetri modeli tanımla: cihaz kimliği, cihaz zamanı, sunucu alım zamanı, bağlantı oturumu, sıralama ve geçerlilik.
 2. Destekleniyorsa konum, gerçek/hedef derinlik, vinç aşaması ve hata kodları ekle; donanımda olmayan alanları bilinmiyor bırak.
@@ -172,7 +174,7 @@ Bitiş ölçütü: görev planı veritabanında saklanır; görev değişince ö
 
 Bitiş ölçütü: tarayıcı saatinden veya animasyondan cihaz durumu üretilmez; bağlantı kaybı ve eski paket senaryoları testlidir. Bu aşama gerçek motor kontrolü içermez.
 
-### M5 — Harici görev simülatörü ve çevrimdışı kuyruk — PLANLANDI
+### M5 — Harici görev simülatörü ve çevrimdışı kuyruk — SIRADAKİ
 
 1. `send_sample.py` fixture aracını koru; ayrı modül/program olarak aşamalı görev simülatörü ekle.
 2. Simülatör M3 planını, M4 telemetri/olay sözleşmesini ve mevcut ölçüm sözleşmesini kullansın.

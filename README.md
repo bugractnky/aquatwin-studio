@@ -131,6 +131,10 @@ Kararlar ve yapılan geliştirmeler: [DEVELOPMENT_DECISIONS.md](DEVELOPMENT_DECI
 | `npm run build` | Üretim dosyalarını `dist/` klasörüne derler. |
 | `npm test` | Model ve temel renk karşıtlığı testlerini çalıştırır. |
 
+## Telemetri ve görev olayları
+
+API çalışma alanında cihaz bazında son telemetri raporu, hedef/gerçek derinlik, vinç aşaması, rapor yaşı ve son 20 görev olayı izlenebilir. API kesilince son veri korunur; eksik alanlar bilinmiyor kalır. Geç gelen paketler son durumu geriye götürmez. Donanım olmadan denemek için `backend/send_telemetry.py` tek seferlik sentetik fixture gönderir. [Sözleşme](docs/TELEMETRY_CONTRACT.md) · [Doğrulama](docs/VALIDATION_TELEMETRY.md). Gerçek cihaz veya motor kontrolü eklenmedi.
+
 ## Kalıcı görev planlama
 
 API çalışma alanında ayrı operatör oturumuyla görev, sıralı istasyonlar, konumlar ve hedef derinlikler oluşturulabilir. Planlar PostgreSQL'de saklanır, ilk ölçüme kadar sürüm kontrollü düzenlenebilir; ölçümden sonra geçmişi korumak için kilitlenir. Plan/ölçüm tablosu hedef ile ölçülen derinliği ayrı gösterir. Plan kaydetmek fiziksel hareket başlatmaz.
@@ -192,7 +196,7 @@ Araştırma dayanakları ve tasarım kararları: **[RESEARCH.md](RESEARCH.md)**.
 | **Geçmiş replay** | Kayıtları sırasıyla açar; gerçek tarihsel bot rotasını yeniden oynatmaz. |
 | **DO dikkat eşiği** | Kullanıcı tarafından değiştirilen bir demo eşiğidir; çevresel tanı veya mevzuat limiti değildir. |
 
-Gerçek batimetri, GNSS koordinat dönüşümü, sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT ve GP/kriging bu sürümde uygulanmış değildir. API ve PostgreSQL bağlantısı uygulanmıştır. API alanı yalnız bilinen `demo-pond-v1` yerel koordinatlarını şematik sahneye koyar; coğrafi koordinatlı kayıtlar tabloda korunur. API alanında cihaz telemetrisi, bot hareketi ve interpolasyon katmanı henüz yoktur. Demo IDW özellikleri ayrı demo modunda korunur.
+Gerçek batimetri, GNSS koordinat dönüşümü, sensör kalibrasyonu, kablo uzunluğu ölçümü, MQTT ve GP/kriging bu sürümde uygulanmış değildir. API ve PostgreSQL bağlantısı uygulanmıştır. API alanı yalnız bilinen `demo-pond-v1` yerel koordinatlarını şematik sahneye koyar; coğrafi koordinatlı kayıtlar tabloda korunur. API alanında telemetri/olay paneli vardır; bot hareketi ve interpolasyon katmanı henüz yoktur. Demo IDW özellikleri ayrı demo modunda korunur.
 
 ## Doğrulama
 
