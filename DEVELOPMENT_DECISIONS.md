@@ -70,3 +70,34 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Bilinmeyen alanlar null, invalid son rapor önceki valid raporla gizlenmez. Yaş sunucunun cihaz/alım zamanından türetilir; retry yaşı sıfırlamaz. 15/60 saniye eşikleri ve 30 saniye ileri saat toleransı saha doğrulanmış gereksinim değil, geçici yazılım kararlarıdır.
 - UI son raporu API hatasında korur, API erişimi ve telemetri güncelliğini ayırır. İlk liste yüklenirken manuel görev seçimini ezebilen stale closure, functional state update ile düzeltildi.
 - Tek seferlik sentetik gönderici eklendi; gerçek motor/sensör entegrasyonu ve çevrimdışı kuyruk yapılmadı. Ayrıntılı güncel test kanıtı VALIDATION_TELEMETRY.md'de tutulur.
+
+## 2026-11-26 — M5 plan replay ve kalıcı kuyruk
+
+- Plan revision'ı server-side simulation_runs rezervasyonuyla kilitlenir; yeni migration 004. Yalnız simulated görevler. Replay aşamaları ve ölçümler plan snapshot'ından üretilir.
+- Timestamp'lar geçmiş sentetik timeline; fiziksel/canlı cihaz başarımı iddia edilmez. Yeni canlı kontrol veya otopilot yok.
+- SQLite yalnız harici cihaz outbox'ı içindir, API DB fallback değildir. Atomik build, kalıcı UUID/payload, 200/201 sonrası ack, backoff, blocked 4xx ve yetki hatasında durma sağlandı. Tek consumer varsayımı belgeli.
+- 49 backend testi geçti: normal/missing/unstable/restart/fault replay, diskten yeniden açılış, tekrar gönderim, backoff ve 409/401 davranışı dahil. UI/testler plan kilidinin yeni sebebini açıklar.
+
+## 2026-11-26 — M6 parametre kalite ve kalibrasyon altyapısı
+
+- Migration 005: append-only kalibrasyon kayıtları ve ölçüm bazlı revision kontrollü parametre değerlendirmeleri. Ham ölçüm ve ingest kalite beyanı değişmez.
+- Özetler ham veriden hesaplanır; eşik yoksa stabilite kararı yok. Eşikler gerekçesiyle açıkça girilir. Kalibrasyon eşleşmesi sensör/parametre/source/tarih/outcome üzerinden doğrulanır; otomatik saha değeri veya kalibrasyon katsayısı üretilmez.
+- Operatör girişi/Origin/CSRF ile yazım; ölçüm ayrıntısında review/history ve kalibrasyon formu. Kayıt tablosu ilk kalite beyanını korur, analiz son parametre review'ını kullanacaktır.
+- 52 backend testi geçti; review çakışması, ham veri koruması, kalibrasyon retry ve hatalı/expired bağlantılar kapsandı. UI uçtan uca doğrulaması bütün aşamalarla birlikte yapılacak.
+
+## 2026-11-26 — M7 yerel koordinat API analizi
+
+- Tek görev/zaman/parametre/referans seçimi; son istasyon/hedef denemesi seçildikten sonra son parametre review'ı (yoksa ingest) kalite kaynağıdır. Son deneme geçersizse eski valid'e sessiz fallback yapılmaz.
+- idw-local-v1: normalize IDW ağırlıkları, açık power/depth_scale/radius, measured/interpolated/no-support ayrımı ve istasyon bazında dışarıda bırakma. Yarıçap maskesi istatistiksel belirsizlik veya dışbükey zarf değildir.
+- UI 11×11 tahmin ızgarası, gerçek ölçülen derinlik profili, kaynak/ayar snapshot'ı ve ayrı görev tahmin farkı gösterir. GNSS derece verisi metre olarak kullanılmaz; gerçek kıyı/batimetri ve doğrulanmış dönüşüm hâlâ veri/donanım bekler.
+- İnceleme sırasında kardeş panel key çakışması ve kalibrasyon eklenirken açık review taslağının yenilenmesi düzeltildi. Milisaniyeli collocated zaman sırası datetime olarak karşılaştırılıyor. Sayısal uç değer özetleri overflow'u açık bırakır; uydurma SD üretmez.
+- Backend toplamı 56 test; son temiz ortam E2E/CI kanıtı VALIDATION_PRE_HARDWARE.md'ye kaydedilir.
+
+## 2026-11-26 — M2 ekip kurulumu ve otomatik kontroller
+
+- scripts/setup.py: kilitli bağımlılıklar, mevcut .env korunması; temiz kaynak kopyasında yeni venv/node_modules ile kurulum doğrulandı.
+- scripts/verify.py: ayrı aquatwin_test* unit/E2E DB doğrulaması, frontend/build/backend kontrolleri, yalnız kendisinin açtığı localhost API/Vite süreçleri ve sonunda cleanup. TIME_WAIT port kontrolü ve ayrı log klasörü ele alındı.
+- GitHub Actions aynı verify komutunu PostgreSQL16/Python3.12/Node20 ortamında çalıştıracak; izin contents:read, checkout credential persistence kapalı, üretim sırrı yok. Test kanıtı artefact olarak tutulur. CI sonucu yerel başarıdan ayrı kaydedilir.
+- Yerel temiz ortamda 56 backend, 18 frontend, 7 E2E ve build geçti; Docker yok, Compose doğrulanmış sayılmıyor. M7 gerçek harita/GNSS ve fiziksel kalite eşikleri hâlâ veriye/donanıma bağlıdır.
+
+- M2 CI kanıtı: 27fe2a8 üzerinde PR run 45719048255 ve push run 45718923840 success tamamlandı; yerel kanıttan ayrı GitHub ortamı doğrulandı. Linkler VALIDATION_PRE_HARDWARE.md'de.

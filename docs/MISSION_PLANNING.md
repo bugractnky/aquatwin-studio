@@ -19,8 +19,8 @@ API alanındaki **Operatör girişi** ile oturum açın. Parola yalnız giriş i
 3. Konum biçimini seçin: şematik yerel metre (`demo-pond-v1`), açık referanslı yerel metre veya enlem/boylam (WGS84).
 4. Her istasyonda benzersiz kimlik, ad, konum ve virgülle ayrılmış hedef derinlikleri girin. Liste sırası istasyon sırasıdır; derinlikler de verilen sırada korunur. 0 m yüzey hedefi geçerlidir. En fazla 3 ondalık basamak kullanılır.
 5. Planı kaydedin. Yeni görev otomatik seçilir; yeniden açıldığında veritabanından okunur.
-6. İlk ölçüm gelene kadar **Planı düzenle** ile yeni revision kaydedilebilir. Eşzamanlı değişiklik 409 ile reddedilir; eski form güncel planı sessizce ezmez.
-7. Herhangi bir ölçüm geldikten sonra plan kilitlenir. Farklı hedefler için yeni görev oluşturun. Ölçümler ve geçmiş plan sürümleri korunur.
+6. İlk ölçüm veya simülasyon rezervasyonu gelene kadar **Planı düzenle** ile yeni revision kaydedilebilir. Eşzamanlı değişiklik 409 ile reddedilir; eski form güncel planı sessizce ezmez.
+7. Herhangi bir ölçüm geldikten veya simulation-run rezerve edildikten sonra plan kilitlenir. Farklı hedefler için yeni görev oluşturun. Ölçümler ve geçmiş plan sürümleri korunur.
 
 Konum biçimi değiştiğinde sayılar otomatik dönüştürülmez; giriş alanları temizlenir. Cihaz planı şematik `demo-pond-v1` referansını kullanamaz. Genel yerel ve GNSS planları saklanır, ancak mevcut şematik 3D sahne yalnız desteklediği demo referansını gösterir. Derinlik veya konum kaydetmek saha uygunluğu onayı değildir.
 
@@ -49,7 +49,7 @@ Konum doğruluğu, tüm sensör parametrelerinin bulunması, kalibrasyon yeterli
 
 Oluşturma gövdesi: mevcut görev alanları `id`, `name`, `source` + `plan`. Plan alanları: `schema_version=1`, `stations`. İstasyon alanları: `station_id`, `name`, `position`, `target_depths_m`. En çok 50 istasyon ve istasyon başına 20 hedef; tüm istasyonlar aynı koordinat referansında olmalıdır. Bunlar yazılım boyut sınırlarıdır, fiziksel limit değildir.
 
-Yeni oluşturma 201; aynı UUID/aynı ilk içerikle yeniden gönderim 200; farklı içerik 409. Revision çakışması veya ölçüm sonrası düzenleme 409; doğrulama hatası 422; eksik oturum 401; Origin/CSRF hatası 403. Var olan Bearer ingest uçları ve ölçüm v1 sözleşmesi değiştirilmedi. Plan güncelleme ve ilk ölçüm ekleme aynı görev satırı kilidini kullanır; geçmişi değiştirebilecek yarış önlenir.
+Yeni oluşturma 201; aynı UUID/aynı ilk içerikle yeniden gönderim 200; farklı içerik 409. Revision çakışması veya ölçüm/simülasyon rezervasyonu sonrası düzenleme 409; doğrulama hatası 422; eksik oturum 401; Origin/CSRF hatası 403. Var olan Bearer ingest uçları ve ölçüm v1 sözleşmesi değiştirilmedi. Plan güncelleme ve ilk ölçüm ekleme aynı görev satırı kilidini kullanır; geçmişi değiştirebilecek yarış önlenir.
 
 Migration `002_mission_plans.sql`: `mission_plans` append-only sürümleri ve `operator_sessions`. Mevcut `001` değiştirilmez. Çalışan API eski kodu kendiliğinden yüklemiyorsa yeniden başlatılmalıdır.
 

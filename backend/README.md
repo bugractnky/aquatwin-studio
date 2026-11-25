@@ -86,3 +86,9 @@ python backend/send_telemetry.py --mission telemetry-fixture
 ```
 
 Yeni komut çağrısı yeni sentetik oturum oluşturur. Gönderici durunca rapor 15 saniyede gecikmiş, 60 saniyede telemetri yok durumuna geçer. Bu fiziksel bağlantı kanıtı değildir; M5 canlı simülatörü veya offline kuyruk henüz yoktur. Token frontend'e verilmez.
+
+## Donanım öncesi akış
+
+Plan rezervasyonu ve kalıcı cihaz outbox’ı: [SIMULATOR.md](../docs/SIMULATOR.md). Ölçüm ayrıntısında parametre kalite/kalibrasyon: [QUALITY.md](../docs/QUALITY.md). Görev/zaman/referans kontrollü IDW, profil ve karşılaştırma: [API_ANALYSIS.md](../docs/API_ANALYSIS.md). Yeni migration 004–005 için API’yi yeniden başlatın. Ölçüm v1 değişmez.
+
+Tekrarlanabilir kurulum ve tek komut unit/build/backend/E2E doğrulama: [TEAM_SETUP.md](../docs/TEAM_SETUP.md). API PostgreSQL kalır; SQLite yalnız harici gönderim kuyruğudur. Yerel arayüz valid sayısı ilk ingest kalite beyanıdır; API analizi son parametre review'ını kullanır.

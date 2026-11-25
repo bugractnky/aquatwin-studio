@@ -121,7 +121,9 @@ test("operator creates and edits a persistent plan; measurements lock it and rem
   await panel
     .getByRole("button", { name: "Planı yenile", exact: true })
     .click();
-  await expect(panel).toContainText("Ölçüm kaydı bulunduğu için plan kilitli");
+  await expect(panel).toContainText(
+    "Plan kilitli: ölçüm kaydı veya ayrılmış simülasyon çalışması var",
+  );
   await expect(panel).toContainText("Geçerli kayıt var");
   await expect(panel).toContainText("1.1 m");
   await expect(

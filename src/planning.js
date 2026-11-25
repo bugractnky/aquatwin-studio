@@ -130,7 +130,7 @@ export async function planningRequest(
       const explanation =
         typeof data.detail === "string"
           ? data.detail
-          : "Plan alanlarını ve konum/derinlik değerlerini kontrol edin.";
+          : "Gönderilen alanları, birimleri ve değerleri kontrol edin.";
       const error = new Error(`${response.status}: ${explanation}`);
       error.status = response.status;
       throw error;
@@ -139,7 +139,7 @@ export async function planningRequest(
   } catch (error) {
     if (controller.signal.aborted && !signal?.aborted)
       throw new Error(
-        "İstek zaman aşımına uğradı. Aynı planı tekrar gönderebilirsiniz.",
+        "İstek zaman aşımına uğradı. İşlemin durumunu kontrol edip tekrar deneyebilirsiniz.",
       );
     throw error;
   } finally {

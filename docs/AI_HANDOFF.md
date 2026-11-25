@@ -28,11 +28,11 @@ Repo: https://github.com/bugractnky/aquatwin-studio
 | Kalıcı görev planı ve operatör oturumu | Uygulandı (M3 branch teslimi) | `src/PlanEditor.jsx`, `src/MissionPlan.jsx`, `backend/app/plans.py`, `backend/app/operator.py` |
 | Fiziksel bot/vinç kontrolü ve sensör sürücüleri | Uygulanmadı | Donanım ve protokol bekleniyor |
 | Telemetri/olay API ve izleme paneli | Uygulandı (M4 branch teslimi) | `backend/app/telemetry.py`, `src/TelemetryPanel.jsx`; gerçek donanım ve komut onayı yok |
-| Cihazda kalıcı çevrimdışı kuyruk | Uygulanmadı | Örnek göndericiyi kuyruk sanma |
+| Harici simülatör ve kalıcı gönderim kuyruğu | Uygulandı | `backend/simulate_mission.py`, `backend/outbox.py`, [SIMULATOR.md](SIMULATOR.md) |
 | Gerçek gölet haritası, batimetri ve GNSS dönüşümü | Uygulanmadı | Mevcut geometri şematik |
-| API verisi üzerinde IDW/GP/Kriging analizi | Uygulanmadı | IDW yalnız demo analizinde; GP/Kriging yok |
+| API yerel koordinat IDW/profil/karşılaştırma | Uygulandı | `backend/app/analysis.py`, `src/AnalysisPanel.jsx`; GP/Kriging yok |
 | İnternet yayını ve çok kullanıcılı yetkilendirme | Uygulanmadı | Yerel geliştirme sistemi |
-| CI iş akışı | Henüz yok | Yerel test komutları var; GitHub CI çalıştı diye yazma |
+| Ekip kurulumu ve CI | Eklendi; kanıtı doğrulama belgesinden kontrol et | `scripts/setup.py`, `scripts/verify.py`, `.github/workflows/validate.yml` |
 
 Ölçüm temeli `feat/measurement-api-foundation` branch'inde üç commit ile teslim edildi:
 
@@ -128,7 +128,7 @@ Kurulumun tek ayrıntılı kaynağı [backend/README.md](../backend/README.md) v
 
 ## 6. Bundan sonraki adım adım plan
 
-Aşağıdaki M1 tamamlanmıştır. **Kullanıcı M2 yerine yazılım özelliği M3'ü önceliklendirdi; M3 uygulandı. M4 uygulandı; sıradaki yazılım özelliği M5, M2 ortam/CI işi hâlâ bekliyor.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
+Aşağıdaki M1 tamamlanmıştır. **Kullanıcı M2 yerine yazılım özelliği M3'ü önceliklendirdi; M3 uygulandı. M4, M5 ve M6 yazılım altyapısı ile M7 yerel koordinat analizi uygulandı. M2 kurulum/CI eklendi; gerçek koşu kanıtını [doğrulama kaydından](VALIDATION_PRE_HARDWARE.md) kontrol et. Saha eşikleri, gerçek koordinat dönüşümü ve donanım adaptörleri teslim edilmiş sayılmaz.** M2–M7 donanım olmadan ilerletilebilir. Cihaz protokolüne bağlı ayrıntılar donanım bilgisi gelmeden kesinleştirilmez.
 
 ### M1 — Kalıcı ölçüm temeli — TAMAMLANDI
 
@@ -136,7 +136,9 @@ Kapsam: ölçüm sözleşmesi, PostgreSQL API, harici fixture gönderimi, React/
 
 Bitiş kanıtı: `7fe1bca` içeriği, PR #1 ve [doğrulama kaydı](VALIDATION_MEASUREMENT_API.md). Bu kayıt geçmiş koşullardaki doğrulamadır; her makinede otomatik test geçmiş sayılmaz.
 
-### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — ERTELENDİ
+### M2 — Tekrarlanabilir ekip ortamı ve otomatik kontroller — NATIVE ORTAM VE CI DOĞRULANDI
+
+[TEAM_SETUP.md](TEAM_SETUP.md): temiz kaynak kurulumu ve tek komut doğrulama. Native PostgreSQL ve GitHub CI başarı kanıtı [VALIDATION_PRE_HARDWARE.md](VALIDATION_PRE_HARDWARE.md) içinde. Docker yok; Compose yolu çalıştırılarak doğrulanmadı. Yeni commit’lerin CI durumu ayrıca kontrol edilmeli.
 
 Amaç: takım arkadaşının kendi makinesinde aynı akışı kurabilmesi; mevcut geçici doğrulama ortamına bağımlılığın kaldırılması.
 
@@ -174,7 +176,9 @@ Bitiş ölçütü: görev planı veritabanında saklanır; görev değişince ö
 
 Bitiş ölçütü: tarayıcı saatinden veya animasyondan cihaz durumu üretilmez; bağlantı kaybı ve eski paket senaryoları testlidir. Bu aşama gerçek motor kontrolü içermez.
 
-### M5 — Harici görev simülatörü ve çevrimdışı kuyruk — SIRADAKİ
+### M5 — Harici görev simülatörü ve çevrimdışı kuyruk — UYGULANDI
+
+[SIMULATOR.md](SIMULATOR.md): plan revision rezervasyonu, geçmiş zamanlı aşamalı sentetik replay ve kalıcı SQLite cihaz outbox’ı. Gerçekçi fizik veya canlı cihaz emülasyonu değil; normal/missing/unstable/restart/fault senaryoları ve retry/reorder sözleşmeleri testlidir.
 
 1. `send_sample.py` fixture aracını koru; ayrı modül/program olarak aşamalı görev simülatörü ekle.
 2. Simülatör M3 planını, M4 telemetri/olay sözleşmesini ve mevcut ölçüm sözleşmesini kullansın.
@@ -185,7 +189,9 @@ Bitiş ölçütü: tarayıcı saatinden veya animasyondan cihaz durumu üretilme
 
 Bitiş ölçütü: kesinti ve süreç restart'ından sonra bekleyen ölçümler birer kez saklanır; görev akışı izlenebilir. Testler sentetik veri ve gerçek DB ile uçtan uca çalışır.
 
-### M6 — Kalite, ham veri ve kalibrasyon — PLANLANDI
+### M6 — Kalite, ham veri ve kalibrasyon — YAZILIM ALTYAPISI UYGULANDI
+
+[QUALITY.md](QUALITY.md): append-only kalibrasyon, parametre bazlı revision kontrollü kalite kararı, ham pencere istatistikleri ve operatör UI. Gerçek eşikler/kalibrasyon deneyi donanım bekliyor.
 
 1. Mevcut genel kalite alanının yanında gerekli parametre/sensör bazlı kalite modelini tasarla.
 2. Ham pencereyi koru; örnek sayısı, süre ve stabilizasyon özetlerini gerçek değerlerden hesapla.
@@ -195,7 +201,9 @@ Bitiş ölçütü: kesinti ve süreç restart'ından sonra bekleyen ölçümler 
 
 Bitiş ölçütü: neden geçerli/geçersiz olduğu izlenebilir; tekrar ölçüm önceki kaydı silmez; kalibrasyon yapılmadıysa yapılmış gösterilmez.
 
-### M7 — Gerçek koordinatlar ve API ölçümlerinde analiz — PLANLANDI
+### M7 — Gerçek koordinatlar ve API ölçümlerinde analiz — YEREL ANALİZ UYGULANDI, SAHA VERİSİ BEKLİYOR
+
+[API_ANALYSIS.md](API_ANALYSIS.md): explicit görev/zaman/parametre/referans, son deneme ve son parametre review seçimi, IDW destek maskesi, gerçek derinlik profili ve ayrı görev karşılaştırması. Gerçek kıyı, batimetri, GNSS dönüşümü ve bağımsız saha doğrulaması eksiktir; sentetik veriyle bunlar tamamlandı denmez.
 
 1. Gölet geometrisi/batimetri verisinin kaynağını ve doğruluğunu doğrula. Veri yoksa şematik etiket korunur.
 2. Kullanılacak koordinat referans sistemi ve GNSS → yerel metre dönüşümünü belgeli, testli hâle getir. PostGIS gerekiyorsa bu ihtiyaca göre ekle.

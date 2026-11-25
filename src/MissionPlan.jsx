@@ -66,8 +66,8 @@ export default function MissionPlan({
           </p>
           {state.data.locked ? (
             <p>
-              Ölçüm kaydı bulunduğu için plan kilitli. Farklı plan için yeni
-              görev oluşturun.
+              Plan kilitli: ölçüm kaydı veya ayrılmış simülasyon çalışması var.
+              Farklı plan için yeni görev oluşturun.
             </p>
           ) : (
             operator.session.authenticated && (
