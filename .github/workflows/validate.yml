@@ -2,7 +2,7 @@ name: AquaTwin validation
 on:
   pull_request:
   push:
-    branches: [main, 'feat/**', 'fix/**', 'docs/**']
+    branches: [main, "feat/**", "fix/**", "docs/**"]
 permissions:
   contents: read
 concurrency:
@@ -19,7 +19,7 @@ jobs:
           POSTGRES_USER: aquatwin
           POSTGRES_PASSWORD: ci-test-password-only
           POSTGRES_DB: aquatwin_test_ci
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U aquatwin -d aquatwin_test_ci"
           --health-interval 5s --health-timeout 5s --health-retries 10
@@ -32,11 +32,11 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: "20"
           cache: npm
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: pip
           cache-dependency-path: backend/requirements.lock
       - run: npm ci
