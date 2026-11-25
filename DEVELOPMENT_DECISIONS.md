@@ -41,3 +41,12 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Kurulum, dosya sorumlulukları, sözleşme sınırları, test ortamları, Git/commit/push düzeni ve gelecek geliştiricinin belge güncelleme yöntemi kaydedildi.
 - Ölçüm sözleşmesindeki GNSS doğruluğu cümlesi gerçek şemayla hizalandı: `accuracy_m` isteğe bağlı; referanslı yerel koordinat alternatifi geçerli; gerçek derinlik zorunlu. Runtime davranışı değiştirilmedi.
 - Bu teslim yalnız dokümantasyondur. Kaynak ve belge bağlantı tutarlılığı kontrol edilecek; eski 12/17/2 test sonucu yeni çalıştırılmış gibi sunulmayacak.
+
+## 2026-11-25 — M3 kalıcı görev planlama
+
+- Kullanıcı, ortam/CI işi M2 yerine yazılım özelliği M3'ün ilerletilmesini istedi. M2 tamamlandı sayılmıyor.
+- Planlar ölçümlerden ayrı, migration 002 ile sürümlü JSON olarak saklanacak. Mevcut ingest sözleşmesi korunuyor.
+- İlk ölçüme kadar revision kontrollü düzenleme; ölçüm geldikten sonra plan kilidi. Yeni plan için yeni görev açılır. Böylece geçmiş ölçümlerin hedefi sonradan değiştirilmez.
+- Operatör girişi cihaz Bearer token'ından ayrı parola ile; HttpOnly/SameSite oturum çerezi, izinli Origin ve CSRF doğrulaması kullanılır. Oturumun yalnız hash'i DB'de 8 saat tutulur. Parola/cihaz token'ı localStorage'a yazılmaz.
+- Plan oluşturmak veya kaydetmek hiçbir fiziksel hareket başlatmaz. Karşılaştırma istasyon kimliği ve hedef derinlik üzerinden kayıt varlığını gösterir; botun konumunu veya derinlik doğruluğunu onaylamaz.
+- Bu bölüm uygulama ilerledikçe gerçek test sonuçlarıyla tamamlanacak.
