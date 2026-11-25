@@ -8,6 +8,9 @@ import {
   sceneRecords,
   toDisplayRecord,
 } from "./api.js";
+import OperatorAccess, { useOperator } from "./OperatorAccess.jsx";
+import PlanEditor from "./PlanEditor.jsx";
+import MissionPlan from "./MissionPlan.jsx";
 const Twin = lazy(() => import("./Twin.jsx"));
 
 function usePolledData(path, transform) {
@@ -51,11 +54,15 @@ const identity = (v) => v;
 export default function ApiWorkspace({ onOpenDemo }) {
   const missions = usePolledData("/api/v1/missions", identity);
   const [chosen, setChosen] = useState("");
+  const operator = useOperator();
+  const [creating, setCreating] = useState(false);
+  const [createdMission, setCreatedMission] = useState(null);
   useEffect(() => {
     if (!chosen && missions.data.length) setChosen(missions.data[0].id);
   }, [chosen, missions.data]);
   const mission =
-    missions.data.find((m) => m.id === chosen) || missions.data[0];
+    missions.data.find((m) => m.id === chosen) ||
+    (createdMission?.id === chosen ? createdMission : missions.data[0]);
   return (
     <main className="api-workspace">
       <header className="api-heading">
@@ -71,6 +78,24 @@ export default function ApiWorkspace({ onOpenDemo }) {
           Sentetik demoya dön
         </button>
       </header>
+      <OperatorAccess operator={operator} />
+      {operator.session.authenticated && (
+        <button className="btn" onClick={() => setCreating(true)}>
+          Yeni görev oluştur
+        </button>
+      )}
+      {creating && (
+        <PlanEditor
+          csrf={operator.session.csrf_token}
+          onClose={() => setCreating(false)}
+          onSaved={(created) => {
+            setCreating(false);
+            setCreatedMission(created);
+            setChosen(created.id);
+            missions.retry();
+          }}
+        />
+      )}
       <section className="panel api-controls" aria-label="Veri kaynağı">
         <label>
           Görev
@@ -81,6 +106,10 @@ export default function ApiWorkspace({ onOpenDemo }) {
             {!missions.data.length && (
               <option value="">Görev bulunamadı</option>
             )}
+            {createdMission &&
+              !missions.data.some((m) => m.id === createdMission.id) && (
+                <option value={createdMission.id}>{createdMission.name}</option>
+              )}
             {missions.data.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.name} · {m.source === "device" ? "Cihaz" : "Sentetik"}
@@ -114,12 +143,14 @@ export default function ApiWorkspace({ onOpenDemo }) {
           </p>
         </div>
       )}
-      {mission && <MissionData key={mission.id} mission={mission} />}
+      {mission && (
+        <MissionData key={mission.id} mission={mission} operator={operator} />
+      )}
     </main>
   );
 }
 
-function MissionData({ mission }) {
+function MissionData({ mission, operator }) {
   const measurements = usePolledData(
     `/api/v1/measurements?mission_id=${encodeURIComponent(mission.id)}`,
     toDisplayRecord,
@@ -186,6 +217,12 @@ function MissionData({ mission }) {
       {!measurements.loading && !measurements.error && !records.length && (
         <p className="notice info">Bu göreve henüz ölçüm gönderilmedi.</p>
       )}
+      <MissionPlan
+        mission={mission}
+        records={records}
+        measurementsReady={!measurements.loading && !measurements.error}
+        operator={operator}
+      />
       <section className="panel api-scene">
         <div className="api-controls">
           <label>

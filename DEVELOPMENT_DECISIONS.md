@@ -49,4 +49,7 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - İlk ölçüme kadar revision kontrollü düzenleme; ölçüm geldikten sonra plan kilidi. Yeni plan için yeni görev açılır. Böylece geçmiş ölçümlerin hedefi sonradan değiştirilmez.
 - Operatör girişi cihaz Bearer token'ından ayrı parola ile; HttpOnly/SameSite oturum çerezi, izinli Origin ve CSRF doğrulaması kullanılır. Oturumun yalnız hash'i DB'de 8 saat tutulur. Parola/cihaz token'ı localStorage'a yazılmaz.
 - Plan oluşturmak veya kaydetmek hiçbir fiziksel hareket başlatmaz. Karşılaştırma istasyon kimliği ve hedef derinlik üzerinden kayıt varlığını gösterir; botun konumunu veya derinlik doğruluğunu onaylamaz.
-- Bu bölüm uygulama ilerledikçe gerçek test sonuçlarıyla tamamlanacak.
+- Uygulandı: yeni operatör/plan route modülleri, migration 002, çok istasyonlu create/edit formu, kalıcı plan okuma, hedef/gerçek derinlik karşılaştırması ve plansız geçmiş görevlerle uyumluluk.
+- Açık düzenleme formu ilk revision snapshot'ını korur; arka planda yeni plan okunması eski taslağın güncel planı ezmesine izin vermez. Geçerli hedef eşleştirmesi fiziksel tolerans değildir.
+- Doğrulandı: 30 backend testi, 16 frontend birim testi, gerçek API ve ayrı E2E PostgreSQL DB'siyle 4 tarayıcı senaryosu, production build. İki yeni tarayıcı senaryosu plan oluşturma/düzenleme/yeniden açma/ölçümle kilit ve eşzamanlı revision çakışmasını kapsar.
+- Masaüstü ve mobil ekranlar incelendi. Sonraki yazılım özelliği M4 telemetri/olay sözleşmesi; M2 ortam/CI işi ertelendi, yapılmış sayılmıyor.
