@@ -19,7 +19,7 @@
 | raw_samples | İsteğe bağlı ham değerler; her öğe göreli `offset_s` ve `parameters` içerir |
 | received_at | Sunucunun atadığı UTC tarih, istemci göndermez |
 
-Birimler: temp=`degC`, ph=`1`, do=`mg/L`, ec=`uS/cm`, turb=`NTU`. Sayılar sonlu olmalıdır. GNSS doğruluğu ve gerçek derinlik bilinmiyorsa bu ilk sözleşmede ölçüm gönderilmez; cihaz adaptörü veri eksikliğini ayrıca ele almalıdır. Buradaki `actual_depth_m` sensörün ölçüm derinliğidir, gölet taban derinliği değildir.
+Birimler: temp=`degC`, ph=`1`, do=`mg/L`, ec=`uS/cm`, turb=`NTU`. Sayılar sonlu olmalıdır. GNSS `accuracy_m` isteğe bağlıdır; konum için en az enlem/boylam çifti veya referanslı yerel koordinatlar gerekir. `actual_depth_m` zorunludur: bilinmiyorsa bu ilk sözleşmede hedef derinlikten türetilerek ölçüm gönderilmez; cihaz adaptörü veri eksikliğini ayrıca ele almalıdır. Buradaki `actual_depth_m` sensörün ölçüm derinliğidir, gölet taban derinliği değildir.
 
 Aynı ölçüm kimliği + aynı normalize içerik → 200; yeni kayıt → 201; aynı kimlik + farklı içerik → 409. Bilinmeyen görev → 404. Uyumsuz kaynak → 409. Hatalı JSON/alan/birim → 422.
 
