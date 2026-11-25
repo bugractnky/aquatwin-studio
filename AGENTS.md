@@ -1,5 +1,9 @@
 # AquaTwin repository instructions for AI assistants
 
+## Mandatory start of every development session
+
+Before editing, automatically follow [docs/SESSION_START.md](docs/SESSION_START.md), including resumed work. Inspect local changes and unfinished Git operations, fetch origin, then verify the base. New tasks start on a new branch from current main; continuing tasks preserve their branch and integrate missing main commits safely. Never automatically discard, stash, commit or mix others' work, reset history or rebase published work. Stop dependent edits on fetch failures, conflicts or unresolved base decisions. Re-read guidance after synchronization and briefly report branch/base status.
+
 ## Read first
 
 Before proposing or editing code, read these tracked files in order:

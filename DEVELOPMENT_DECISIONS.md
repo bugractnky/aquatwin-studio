@@ -53,3 +53,10 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Açık düzenleme formu ilk revision snapshot'ını korur; arka planda yeni plan okunması eski taslağın güncel planı ezmesine izin vermez. Geçerli hedef eşleştirmesi fiziksel tolerans değildir.
 - Doğrulandı: 30 backend testi, 16 frontend birim testi, gerçek API ve ayrı E2E PostgreSQL DB'siyle 4 tarayıcı senaryosu, production build. İki yeni tarayıcı senaryosu plan oluşturma/düzenleme/yeniden açma/ölçümle kilit ve eşzamanlı revision çakışmasını kapsar.
 - Masaüstü ve mobil ekranlar incelendi. Sonraki yazılım özelliği M4 telemetri/olay sözleşmesi; M2 ortam/CI işi ertelendi, yapılmış sayılmıyor.
+
+## 2026-11-25 — Her AI oturumunda güvenli Git başlangıcı
+
+- Kullanıcı ekip merge'lerinin geliştirmeden önce otomatik kontrol edilmesini istedi. SESSION_START.md ortak prosedürü AGENTS, Claude, Copilot, README ve handoff'a bağlandı.
+- Yeni iş: temiz main fast-forward, origin/main ile eşitlik kontrolü, yeni branch. Devam eden iş: branch korunur, main farkları güvenli entegre edilir; yayımlanmış history otomatik rebase edilmez.
+- Dirty alan, başarısız fetch ve ayrışmış history sessiz reset/stash/overwrite ile aşılmaz. Arka plan pull servisi kurulmadı; her AI'ın rehberleri otomatik okuması garanti edilemez.
+- Yalnız belgeler değişti; runtime test sonucu iddia edilmiyor.
