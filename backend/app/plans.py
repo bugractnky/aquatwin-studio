@@ -60,6 +60,10 @@ def check_source(source, plan):
         raise HTTPException(422, 'Device plans cannot use the schematic demo-pond-v1 reference')
 
 
+def plan_locked(conn, mission_id):
+    return conn.execute('SELECT EXISTS(SELECT 1 FROM measurements WHERE mission_id=%s) OR EXISTS(SELECT 1 FROM simulation_runs WHERE mission_id=%s) AS locked', (mission_id, mission_id)).fetchone()['locked']
+
+
 def latest_plan(conn, mission_id):
     row = conn.execute('SELECT revision,payload,created_at FROM mission_plans WHERE mission_id=%s ORDER BY revision DESC LIMIT 1',
                        (mission_id,)).fetchone()
@@ -91,7 +95,7 @@ def get_plan(mission_id: UUID):
         if not conn.execute('SELECT 1 FROM missions WHERE id=%s', (mission_id,)).fetchone():
             raise HTTPException(404, 'Mission not found')
         latest = latest_plan(conn, mission_id)
-        locked = conn.execute('SELECT EXISTS(SELECT 1 FROM measurements WHERE mission_id=%s) AS locked', (mission_id,)).fetchone()['locked']
+        locked = plan_locked(conn, mission_id)
         return {'mission_id': mission_id, 'revision': latest['revision'] if latest else 0,
                 'plan': latest['plan'] if latest else None, 'created_at': latest['created_at'] if latest else None,
                 'locked': locked}
@@ -109,8 +113,8 @@ def update_plan(mission_id: UUID, body: PlanUpdate):
         current = latest['revision'] if latest else 0
         if body.expected_revision != current:
             raise HTTPException(409, 'Plan changed; reload before editing')
-        if conn.execute('SELECT 1 FROM measurements WHERE mission_id=%s LIMIT 1', (mission_id,)).fetchone():
-            raise HTTPException(409, 'Plan is locked because measurements exist; create a new mission')
+        if plan_locked(conn, mission_id):
+            raise HTTPException(409, 'Plan is locked by measurements or a reserved simulation; create a new mission')
         payload = body.plan.model_dump(mode='json')
         if latest and latest['plan'] == payload:
             return {'mission_id': mission_id, **latest}

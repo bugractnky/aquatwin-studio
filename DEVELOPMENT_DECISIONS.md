@@ -70,3 +70,10 @@ Tamamlanan geliştirmeler ve test sonuçları sonraki commit'lerde bu bölüme y
 - Bilinmeyen alanlar null, invalid son rapor önceki valid raporla gizlenmez. Yaş sunucunun cihaz/alım zamanından türetilir; retry yaşı sıfırlamaz. 15/60 saniye eşikleri ve 30 saniye ileri saat toleransı saha doğrulanmış gereksinim değil, geçici yazılım kararlarıdır.
 - UI son raporu API hatasında korur, API erişimi ve telemetri güncelliğini ayırır. İlk liste yüklenirken manuel görev seçimini ezebilen stale closure, functional state update ile düzeltildi.
 - Tek seferlik sentetik gönderici eklendi; gerçek motor/sensör entegrasyonu ve çevrimdışı kuyruk yapılmadı. Ayrıntılı güncel test kanıtı VALIDATION_TELEMETRY.md'de tutulur.
+
+## 2026-11-26 — M5 plan replay ve kalıcı kuyruk
+
+- Plan revision'ı server-side simulation_runs rezervasyonuyla kilitlenir; yeni migration 004. Yalnız simulated görevler. Replay aşamaları ve ölçümler plan snapshot'ından üretilir.
+- Timestamp'lar geçmiş sentetik timeline; fiziksel/canlı cihaz başarımı iddia edilmez. Yeni canlı kontrol veya otopilot yok.
+- SQLite yalnız harici cihaz outbox'ı içindir, API DB fallback değildir. Atomik build, kalıcı UUID/payload, 200/201 sonrası ack, backoff, blocked 4xx ve yetki hatasında durma sağlandı. Tek consumer varsayımı belgeli.
+- 49 backend testi geçti: normal/missing/unstable/restart/fault replay, diskten yeniden açılış, tekrar gönderim, backoff ve 409/401 davranışı dahil. UI/testler plan kilidinin yeni sebebini açıklar.
